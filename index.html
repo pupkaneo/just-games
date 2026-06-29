@@ -11,10 +11,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Игровая библиотека — Дакиев Руслан</title>
+    <title>Игровая библиотека</title>
     <meta name="author" content="Дакиев Руслан">
     <meta name="copyright" content="Дакиев Руслан, 2024">
-    <meta name="description" content="Игровая библиотека с играми: Угадай число, Камень-ножницы-бумага">
+    <meta name="description" content="Игровая библиотека: Угадай число, Камень-ножницы-бумага, Крестики-нолики">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -45,13 +45,6 @@
             color: #666;
             font-size: 18px;
             margin-bottom: 30px;
-        }
-        
-        .author-badge {
-            text-align: center;
-            color: #888;
-            font-size: 14px;
-            margin-bottom: 20px;
         }
         
         .games-grid {
@@ -104,27 +97,21 @@
             margin-top: 30px;
             padding-top: 20px;
             border-top: 2px solid #eee;
-            color: #666;
-            font-size: 14px;
-        }
-        
-        .footer .copy {
-            font-weight: bold;
-            color: #333;
+            color: #999;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🎮 Игровая библиотека</h1>
-        <div class="author-badge">Автор: Дакиев Руслан</div>
         <p class="subtitle">Добро пожаловать! Выбери игру и начни играть прямо в браузере</p>
         
         <div class="games-grid">
             <div class="game-card" onclick="window.location.href='guess.html'">
                 <span class="game-icon">🔢</span>
                 <div class="game-title">Угадай число</div>
-                <div class="game-desc">Угадай число от 1 до 10 за 3 попытки</div>
+                <div class="game-desc">Угадай число от 1 до 1000 за 10 попыток</div>
             </div>
             
             <div class="game-card" onclick="window.location.href='rps.html'">
@@ -133,10 +120,10 @@
                 <div class="game-desc">Сразись с компьютером в классическую игру</div>
             </div>
             
-            <div class="game-card coming-soon">
-                <span class="game-icon">❓</span>
-                <div class="game-title">Скоро!</div>
-                <div class="game-desc">Новая игра уже в разработке</div>
+            <div class="game-card" onclick="window.location.href='tictac.html'">
+                <span class="game-icon">❌</span>
+                <div class="game-title">Крестики-нолики</div>
+                <div class="game-desc">Сыграй с другом или компьютером</div>
             </div>
             
             <div class="game-card coming-soon">
@@ -147,8 +134,7 @@
         </div>
         
         <div class="footer">
-            <p><span class="copy">© 2024 Дакиев Руслан.</span> Все права защищены.</p>
-            <p style="font-size: 12px;">Копирование, распространение или использование без разрешения автора запрещено.</p>
+            © 2024 Все права защищены.
         </div>
     </div>
 </body>
