@@ -1,7 +1,7 @@
 <!--
     ============================================================
     Автор: Дакиев Руслан
-    Название: Игра "Крестики-нолики"
+    Название: GameZone — Крестики-нолики
     Год: 2024
     Все права защищены.
     ============================================================
@@ -11,9 +11,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Крестики-нолики</title>
+    <title>GameZone — Крестики-нолики</title>
     <meta name="author" content="Дакиев Руслан">
     <meta name="copyright" content="Дакиев Руслан, 2024">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -35,9 +36,26 @@
             text-align: center;
         }
         
+        .logo {
+            font-size: 30px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
         h1 {
             color: #333;
             margin-bottom: 5px;
+            font-size: 28px;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #4facfe;
+            color: white;
+            padding: 4px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 10px;
         }
         
         .status {
@@ -183,7 +201,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>❌ Крестики-нолики ⭕</h1>
+        <span class="logo">🎮</span>
+        <h1>GameZone</h1>
+        <div class="badge">Крестики-нолики</div>
         
         <div class="status" id="status">Ход: <span style="color:#4facfe;">X</span></div>
         
@@ -213,7 +233,7 @@
         <button class="back-btn" onclick="window.location.href='index.html'">🏠 На главную</button>
         
         <div class="footer">
-            © 2024 Все права защищены.
+            © 2024 Все права защищены. GameZone
         </div>
     </div>
     
