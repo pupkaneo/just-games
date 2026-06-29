@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моя игровая библиотека</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 40px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .game-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+        
+        .game-icon {
+            font-size: 50px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .game-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .game-desc {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .coming-soon {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Моя игровая библиотека</h1>
+        <p class="subtitle">Добро пожаловать! Выбери игру и начни играть прямо в браузере</p>
+        
+        <div class="games-grid">
+            <!-- Карточка игры "Угадай число" -->
+            <div class="game-card" onclick="window.location.href='guess.html'">
+                <span class="game-icon">🔢</span>
+                <div class="game-title">Угадай число</div>
+                <div class="game-desc">Угадай число от 1 до 10 за 3 попытки</div>
+            </div>
+            
+            <!-- Карточка игры "Камень-ножницы-бумага" -->
+            <div class="game-card" onclick="window.location.href='rps.html'">
+                <span class="game-icon">✊</span>
+                <div class="game-title">Камень-ножницы-бумага</div>
+                <div class="game-desc">Сразись с компьютером в классическую игру</div>
+            </div>
+            
+            <!-- Карточка для будущей игры -->
+            <div class="game-card coming-soon">
+                <span class="game-icon">❓</span>
+                <div class="game-title">Скоро!</div>
+                <div class="game-desc">Новая игра уже в разработке</div>
+            </div>
+            
+            <!-- Карточка для будущей игры -->
+            <div class="game-card coming-soon">
+                <span class="game-icon">❓</span>
+                <div class="game-title">Скоро!</div>
+                <div class="game-desc">Новая игра уже в разработке</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Создано с ❤️ в ходе обучения программированию
+        </div>
+    </div>
+</body>
+</html>
