@@ -1,7 +1,7 @@
 <!--
     ============================================================
     Автор: Дакиев Руслан
-    Название: Игровая библиотека
+    Название: GameZone
     Год: 2024
     Все права защищены.
     ============================================================
@@ -20,52 +20,179 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
     
     <style>
+        /* ===== ОСНОВНЫЕ ПЕРЕМЕННЫЕ (СВЕТЛАЯ ТЕМА ПО УМОЛЧАНИЮ) ===== */
+        :root {
+            --bg-body: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-container: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --bg-card: #f8f9fa;
+            --border-card: transparent;
+            --shadow: 0 10px 40px rgba(0,0,0,0.3);
+            --badge-bg: #667eea;
+            --badge-text: white;
+        }
+        
+        /* ===== ТЁМНАЯ ТЕМА ===== */
+        [data-theme="dark"] {
+            --bg-body: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --bg-container: #1e1e2e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #aaaaaa;
+            --text-muted: #777777;
+            --bg-card: #2a2a3e;
+            --border-card: #3a3a5e;
+            --shadow: 0 10px 40px rgba(0,0,0,0.7);
+            --badge-bg: #4facfe;
+            --badge-text: #ffffff;
+        }
+        
+        /* ===== ОБЩИЕ СТИЛИ ===== */
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-body);
             margin: 0;
             padding: 40px;
             min-height: 100vh;
+            transition: background 0.5s ease;
         }
         
         .container {
             max-width: 900px;
             margin: 0 auto;
-            background: white;
+            background: var(--bg-container);
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            box-shadow: var(--shadow);
+            transition: background 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
         }
         
+        /* ===== ШАПКА С ПЕРЕКЛЮЧАТЕЛЕМ ===== */
         .header {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
             gap: 15px;
             margin-bottom: 5px;
         }
         
-        .header .logo {
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .header-left .logo {
             font-size: 48px;
         }
         
         h1 {
-            text-align: center;
-            color: #333;
+            color: var(--text-primary);
             font-size: 38px;
             margin: 0;
             background: linear-gradient(135deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            transition: color 0.4s ease;
         }
         
+        /* ===== ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ ===== */
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .theme-switch-wrapper span {
+            font-size: 20px;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+        
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            flex-shrink: 0;
+        }
+        
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 30px;
+        }
+        
+        .slider::before {
+            content: "";
+            position: absolute;
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+        
+        input:checked + .slider::before {
+            transform: translateX(30px);
+        }
+        
+        .slider .sun {
+            position: absolute;
+            left: 6px;
+            top: 3px;
+            font-size: 16px;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+        
+        .slider .moon {
+            position: absolute;
+            right: 8px;
+            top: 3px;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        input:checked + .slider .sun {
+            opacity: 0;
+        }
+        
+        input:checked + .slider .moon {
+            opacity: 1;
+        }
+        
+        /* ===== ОСТАЛЬНЫЕ ЭЛЕМЕНТЫ ===== */
         .subtitle {
             text-align: center;
-            color: #666;
+            color: var(--text-secondary);
             font-size: 18px;
             margin-bottom: 30px;
             margin-top: 5px;
+            transition: color 0.3s;
         }
         
         .games-grid {
@@ -75,20 +202,19 @@
         }
         
         .game-card {
-            background: #f8f9fa;
+            background: var(--bg-card);
             padding: 30px;
             border-radius: 15px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
-            border: 2px solid transparent;
-            position: relative;
-            overflow: hidden;
+            border: 2px solid var(--border-card);
+            color: var(--text-primary);
         }
         
         .game-card:hover {
             transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             border-color: #667eea;
         }
         
@@ -105,19 +231,19 @@
         .game-card .game-title {
             font-size: 20px;
             font-weight: bold;
-            color: #333;
+            color: var(--text-primary);
         }
         
         .game-card .game-desc {
-            color: #666;
+            color: var(--text-secondary);
             font-size: 14px;
             margin-top: 5px;
         }
         
         .game-card .card-badge {
             display: inline-block;
-            background: #667eea;
-            color: white;
+            background: var(--badge-bg);
+            color: var(--badge-text);
             font-size: 10px;
             padding: 2px 10px;
             border-radius: 10px;
@@ -132,20 +258,21 @@
         .game-card.coming-soon:hover {
             transform: none;
             box-shadow: none;
-            border-color: transparent;
+            border-color: var(--border-card);
         }
         
         .footer {
             text-align: center;
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 2px solid #eee;
-            color: #999;
+            border-top: 2px solid var(--border-card);
+            color: var(--text-muted);
             font-size: 12px;
+            transition: border-color 0.3s, color 0.3s;
         }
         
         .footer .version {
-            color: #ccc;
+            color: var(--text-muted);
             font-size: 11px;
         }
         
@@ -153,15 +280,41 @@
             .games-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .header {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .header-left {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- ===== ШАПКА С ПЕРЕКЛЮЧАТЕЛЕМ ===== -->
         <div class="header">
-            <span class="logo">🎮</span>
-            <h1>GameZone</h1>
+            <div class="header-left">
+                <span class="logo">🎮</span>
+                <h1>GameZone</h1>
+            </div>
+            
+            <div class="theme-switch-wrapper">
+                <span>☀️</span>
+                <label class="theme-switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider">
+                        <span class="sun">☀️</span>
+                        <span class="moon">🌙</span>
+                    </span>
+                </label>
+                <span>🌙</span>
+            </div>
         </div>
+        
         <p class="subtitle">⚡ Твой игровой портал — играй прямо в браузере!</p>
         
         <div class="games-grid">
@@ -203,5 +356,35 @@
             <p class="version">GameZone v2.0</p>
         </div>
     </div>
+    
+    <script>
+        // ============================================================
+        // Автор: Дакиев Руслан
+        // Функция: Переключение тёмной темы
+        // ============================================================
+        
+        // Находим переключатель
+        var toggle = document.getElementById('themeToggle');
+        
+        // Проверяем, есть ли сохранённая тема в localStorage
+        var currentTheme = localStorage.getItem('theme');
+        
+        // Если тема сохранена как 'dark' — включаем её
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            toggle.checked = true;
+        }
+        
+        // Слушаем изменение переключателя
+        toggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    </script>
 </body>
 </html>
