@@ -1,0 +1,372 @@
+<!--
+    ============================================================
+    Автор: Дакиев Руслан
+    Название: GameZone — Крестики-нолики (игрок против игрока)
+    Год: 2024
+    Все права защищены.
+    ============================================================
+-->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameZone — Крестики-нолики (с другом)</title>
+    <meta name="author" content="Дакиев Руслан">
+    <meta name="copyright" content="Дакиев Руслан, 2024">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            margin: 0;
+            padding: 40px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 500px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 30px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #f5576c;
+            color: white;
+            padding: 4px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .status {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 15px 0;
+            min-height: 30px;
+            color: #333;
+        }
+        
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px auto;
+            max-width: 350px;
+        }
+        
+        .cell {
+            aspect-ratio: 1;
+            background: #f8f9fa;
+            border: 3px solid #ddd;
+            border-radius: 15px;
+            font-size: 60px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #333;
+        }
+        
+        .cell:hover:not(.taken) {
+            background: #e9ecef;
+            transform: scale(1.03);
+            border-color: #f5576c;
+        }
+        
+        .cell.taken {
+            cursor: not-allowed;
+        }
+        
+        .cell.x {
+            color: #4facfe;
+        }
+        
+        .cell.o {
+            color: #f5576c;
+        }
+        
+        .cell.win-cell {
+            background: #d4edda;
+            border-color: #28a745;
+            animation: winPulse 0.5s ease-in-out 3;
+        }
+        
+        @keyframes winPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .score {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .score .x-score {
+            color: #4facfe;
+        }
+        
+        .score .o-score {
+            color: #f5576c;
+        }
+        
+        .score .draw-score {
+            color: #6c757d;
+        }
+        
+        button {
+            padding: 12px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+            font-weight: bold;
+        }
+        
+        .btn-reset {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-reset:hover {
+            background: #5a6268;
+            transform: scale(1.05);
+        }
+        
+        .btn-new {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-new:hover {
+            background: #218838;
+            transform: scale(1.05);
+        }
+        
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            margin-top: 15px;
+        }
+        
+        .back-btn:hover {
+            background: #5a6268;
+            transform: scale(1.05);
+        }
+        
+        .mode-btn {
+            background: #4facfe;
+            color: white;
+        }
+        
+        .mode-btn:hover {
+            background: #3d8bda;
+            transform: scale(1.05);
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .winner-text {
+            font-size: 24px;
+            animation: winText 0.5s ease-in-out 3;
+        }
+        
+        @keyframes winText {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="logo">🎮</span>
+        <h1>GameZone</h1>
+        <div class="badge">👥 Игрок против игрока</div>
+        
+        <div class="status" id="status">Ход: <span style="color:#4facfe;">X</span></div>
+        
+        <div class="board" id="board">
+            <div class="cell" data-index="0" onclick="makeMove(0)"></div>
+            <div class="cell" data-index="1" onclick="makeMove(1)"></div>
+            <div class="cell" data-index="2" onclick="makeMove(2)"></div>
+            <div class="cell" data-index="3" onclick="makeMove(3)"></div>
+            <div class="cell" data-index="4" onclick="makeMove(4)"></div>
+            <div class="cell" data-index="5" onclick="makeMove(5)"></div>
+            <div class="cell" data-index="6" onclick="makeMove(6)"></div>
+            <div class="cell" data-index="7" onclick="makeMove(7)"></div>
+            <div class="cell" data-index="8" onclick="makeMove(8)"></div>
+        </div>
+        
+        <div class="score">
+            <span class="x-score">❌ X: <span id="xScore">0</span></span>
+            <span class="draw-score">🤝 Ничьи: <span id="drawScore">0</span></span>
+            <span class="o-score">⭕ O: <span id="oScore">0</span></span>
+        </div>
+        
+        <div>
+            <button class="btn-new" onclick="newGame()">🔄 Новая игра</button>
+            <button class="btn-reset" onclick="resetScore()">📊 Сбросить счёт</button>
+        </div>
+        
+        <div>
+            <button class="mode-btn" onclick="window.location.href='tictac.html'">🎮 Сменить режим</button>
+            <button class="back-btn" onclick="window.location.href='index.html'">🏠 На главную</button>
+        </div>
+        
+        <div class="footer">
+            © 2024 Все права защищены. GameZone
+        </div>
+    </div>
+    
+    <script>
+        // ============================================================
+        // Автор: Дакиев Руслан
+        // Игра: Крестики-нолики (игрок против игрока)
+        // ============================================================
+        
+        var board = Array(9).fill(null);
+        var currentPlayer = 'X';
+        var gameActive = true;
+        var xScore = 0;
+        var oScore = 0;
+        var drawScore = 0;
+        
+        var winPatterns = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+        
+        var cells = document.querySelectorAll('.cell');
+        var statusEl = document.getElementById('status');
+        var xScoreEl = document.getElementById('xScore');
+        var oScoreEl = document.getElementById('oScore');
+        var drawScoreEl = document.getElementById('drawScore');
+        
+        function makeMove(index) {
+            if (!gameActive) {
+                statusEl.textContent = '⛔ Игра окончена! Нажми "Новая игра"';
+                return;
+            }
+            
+            if (board[index] !== null) {
+                statusEl.textContent = '⛔ Эта клетка уже занята!';
+                return;
+            }
+            
+            board[index] = currentPlayer;
+            cells[index].textContent = currentPlayer;
+            cells[index].classList.add('taken', currentPlayer.toLowerCase());
+            
+            if (checkWin(currentPlayer)) {
+                highlightWin(currentPlayer);
+                statusEl.innerHTML = '🏆 Победил <span style="color:' + (currentPlayer === 'X' ? '#4facfe' : '#f5576c') + ';font-size:28px;">' + currentPlayer + '</span>! 🎉';
+                statusEl.className = 'status winner-text';
+                gameActive = false;
+                updateScore(currentPlayer);
+                return;
+            }
+            
+            if (board.every(function(cell) { return cell !== null; })) {
+                statusEl.textContent = '🤝 Ничья!';
+                statusEl.className = 'status';
+                gameActive = false;
+                drawScore++;
+                updateScoreDisplay();
+                return;
+            }
+            
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            statusEl.innerHTML = 'Ход: <span style="color:' + (currentPlayer === 'X' ? '#4facfe' : '#f5576c') + ';">' + currentPlayer + '</span>';
+            statusEl.className = 'status';
+        }
+        
+        function checkWin(player) {
+            return winPatterns.some(function(pattern) {
+                return pattern.every(function(index) {
+                    return board[index] === player;
+                });
+            });
+        }
+        
+        function highlightWin(player) {
+            winPatterns.forEach(function(pattern) {
+                if (pattern.every(function(index) {
+                    return board[index] === player;
+                })) {
+                    pattern.forEach(function(index) {
+                        cells[index].classList.add('win-cell');
+                    });
+                }
+            });
+        }
+        
+        function updateScore(player) {
+            if (player === 'X') xScore++;
+            else oScore++;
+            updateScoreDisplay();
+        }
+        
+        function updateScoreDisplay() {
+            xScoreEl.textContent = xScore;
+            oScoreEl.textContent = oScore;
+            drawScoreEl.textContent = drawScore;
+        }
+        
+        function newGame() {
+            board = Array(9).fill(null);
+            currentPlayer = 'X';
+            gameActive = true;
+            
+            cells.forEach(function(cell) {
+                cell.textContent = '';
+                cell.className = 'cell';
+            });
+            
+            statusEl.innerHTML = 'Ход: <span style="color:#4facfe;">X</span>';
+            statusEl.className = 'status';
+        }
+        
+        function resetScore() {
+            xScore = 0;
+            oScore = 0;
+            drawScore = 0;
+            updateScoreDisplay();
+            newGame();
+            statusEl.textContent = '📊 Счёт сброшен! Начинаем заново!';
+        }
+    </script>
+</body>
+</html>
