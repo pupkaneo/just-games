@@ -16,43 +16,145 @@
     <meta name="copyright" content="Дакиев Руслан, 2024">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
     <style>
+        :root {
+            --bg-body: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-container: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --border-color: #eee;
+            --shadow: 0 10px 40px rgba(0,0,0,0.3);
+            --bg-card: #f8f9fa;
+            --border-card: transparent;
+            --slider-bg: #ccc;
+        }
+        
+        [data-theme="dark"] {
+            --bg-body: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --bg-container: #1e1e2e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #aaaaaa;
+            --text-muted: #777777;
+            --border-color: #3a3a5e;
+            --shadow: 0 10px 40px rgba(0,0,0,0.7);
+            --bg-card: #2a2a3e;
+            --border-card: #3a3a5e;
+            --slider-bg: #4a4a6e;
+        }
+        
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-body);
             margin: 0;
             padding: 40px;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: background 0.5s ease;
         }
         
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background: white;
-            padding: 50px;
+            background: var(--bg-container);
+            padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            box-shadow: var(--shadow);
             text-align: center;
+            transition: background 0.4s ease, box-shadow 0.4s ease;
         }
         
-        .logo {
-            font-size: 40px;
-            display: block;
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
             margin-bottom: 5px;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header-left .logo {
+            font-size: 30px;
         }
         
         h1 {
-            color: #333;
-            font-size: 32px;
-            margin-bottom: 5px;
+            color: var(--text-primary);
+            font-size: 28px;
+            margin: 0;
+            transition: color 0.3s;
+        }
+        
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .theme-switch-wrapper .icon {
+            font-size: 18px;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+        
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--slider-bg);
+            transition: 0.4s;
+            border-radius: 24px;
+        }
+        
+        .slider::before {
+            content: "";
+            position: absolute;
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+        
+        input:checked + .slider::before {
+            transform: translateX(24px);
         }
         
         .subtitle {
-            color: #666;
+            color: var(--text-secondary);
             font-size: 16px;
             margin-bottom: 30px;
+            margin-top: 5px;
+            transition: color 0.3s;
         }
         
         .mode-grid {
@@ -63,12 +165,13 @@
         }
         
         .mode-card {
-            background: #f8f9fa;
+            background: var(--bg-card);
             padding: 30px;
             border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s;
-            border: 3px solid transparent;
+            border: 3px solid var(--border-card);
+            color: var(--text-primary);
         }
         
         .mode-card:hover {
@@ -86,20 +189,20 @@
         .mode-card .title {
             font-size: 22px;
             font-weight: bold;
-            color: #333;
+            color: var(--text-primary);
         }
         
         .mode-card .desc {
-            color: #666;
+            color: var(--text-secondary);
             font-size: 14px;
             margin-top: 5px;
         }
         
         .mode-card .features {
-            color: #888;
+            color: var(--text-muted);
             font-size: 13px;
             margin-top: 8px;
-            background: white;
+            background: var(--bg-container);
             padding: 8px;
             border-radius: 8px;
         }
@@ -108,12 +211,20 @@
             background: #e3f2fd;
         }
         
+        [data-theme="dark"] .mode-card.classic {
+            background: #1a2a4a;
+        }
+        
         .mode-card.classic:hover {
             border-color: #2196f3;
         }
         
         .mode-card.advanced {
             background: #fce4ec;
+        }
+        
+        [data-theme="dark"] .mode-card.advanced {
+            background: #3a1a2a;
         }
         
         .mode-card.advanced:hover {
@@ -140,39 +251,20 @@
         .footer {
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 2px solid #eee;
-            color: #999;
+            border-top: 2px solid var(--border-color);
+            color: var(--text-muted);
             font-size: 12px;
+            transition: border-color 0.3s, color 0.3s;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <span class="logo">🎮</span>
-        <h1>GameZone</h1>
-        <p class="subtitle">✊ Камень-ножницы-бумага — выбери режим</p>
-        
-        <div class="mode-grid">
-            <div class="mode-card classic" onclick="window.location.href='rps-classic.html'">
-                <span class="icon">✊</span>
-                <div class="title">Классическая версия</div>
-                <div class="desc">Три варианта: камень, ножницы, бумага</div>
-                <div class="features">✅ Простые правила • ✅ Быстрая игра • ✅ 3 варианта</div>
+        <div class="header">
+            <div class="header-left">
+                <span class="logo">🎮</span>
+                <h1>GameZone</h1>
             </div>
-            
-            <div class="mode-card advanced" onclick="window.location.href='rpsls.html'">
-                <span class="icon">🦎</span>
-                <div class="title">Расширенная версия</div>
-                <div class="desc">Пять вариантов: камень, ножницы, бумага, ящерица, Спок</div>
-                <div class="features">🔥 Сложнее • 🔥 Интереснее • 🔥 5 вариантов</div>
-            </div>
-        </div>
-        
-        <button class="back-btn" onclick="window.location.href='index.html'">🏠 На главную</button>
-        
-        <div class="footer">
-            © 2024 Все права защищены. GameZone
-        </div>
-    </div>
-</body>
-</html>
+            <div class="theme-switch-wrapper">
+                <span class="icon">☀️</span>
+                <label class="theme
