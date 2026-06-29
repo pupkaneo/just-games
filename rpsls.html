@@ -291,13 +291,12 @@
         // Игра: Камень-ножницы-бумага-ящерица-Спок
         // ============================================================
         
-        let playerScore = 0;
-        let computerScore = 0;
-        let ties = 0;
-        let isPlaying = false;
+        var playerScore = 0;
+        var computerScore = 0;
+        var ties = 0;
+        var isPlaying = false;
         
-        // Правила: что кого побеждает
-        const rules = {
+        var rules = {
             'камень': ['ножницы', 'ящерица'],
             'ножницы': ['бумага', 'ящерица'],
             'бумага': ['камень', 'спок'],
@@ -305,7 +304,7 @@
             'спок': ['камень', 'ножницы']
         };
         
-        const emojis = {
+        var emojis = {
             'камень': '🪨',
             'ножницы': '✂️',
             'бумага': '📄',
@@ -313,11 +312,11 @@
             'спок': '🖖'
         };
         
-        const computerChoiceEl = document.getElementById('computerChoice');
-        const resultEl = document.getElementById('result');
-        const scoreEl = document.getElementById('score');
-        const statusEl = document.getElementById('status');
-        const buttons = document.querySelectorAll('.choice-btn');
+        var computerChoiceEl = document.getElementById('computerChoice');
+        var resultEl = document.getElementById('result');
+        var scoreEl = document.getElementById('score');
+        var statusEl = document.getElementById('status');
+        var buttons = document.querySelectorAll('.choice-btn');
         
         function play(playerChoice) {
             if (isPlaying) {
@@ -326,26 +325,26 @@
             }
             
             isPlaying = true;
-            buttons.forEach(btn => btn.disabled = true);
+            buttons.forEach(function(btn) { btn.disabled = true; });
             statusEl.textContent = '🤔 Компьютер выбирает...';
             
-            const emojiSpan = document.querySelector('.computer-choice .emoji');
+            var emojiSpan = document.querySelector('.computer-choice .emoji');
             emojiSpan.textContent = '💭';
             emojiSpan.className = 'emoji thinking';
             resultEl.textContent = '...';
             resultEl.style.color = '#666';
             
-            setTimeout(() => {
-                const choices = ['камень', 'ножницы', 'бумага', 'ящерица', 'спок'];
-                const computerChoice = choices[Math.floor(Math.random() * 5)];
+            setTimeout(function() {
+                var choices = ['камень', 'ножницы', 'бумага', 'ящерица', 'спок'];
+                var computerChoice = choices[Math.floor(Math.random() * 5)];
                 
                 emojiSpan.textContent = emojis[computerChoice];
                 emojiSpan.className = 'emoji';
                 document.querySelector('.computer-choice').innerHTML = 
-                    `🤖 <span class="emoji">${emojis[computerChoice]}</span> Компьютер выбрал: <strong>${computerChoice}</strong>`;
+                    '🤖 <span class="emoji">' + emojis[computerChoice] + '</span> Компьютер выбрал: <strong>' + computerChoice + '</strong>';
                 
-                let result = '';
-                let resultColor = '#333';
+                var result = '';
+                var resultColor = '#333';
                 
                 if (playerChoice === computerChoice) {
                     result = '🤝 Ничья!';
@@ -368,17 +367,13 @@
                 statusEl.textContent = '✅ Готов к следующему ходу!';
                 
                 isPlaying = false;
-                buttons.forEach(btn => btn.disabled = false);
+                buttons.forEach(function(btn) { btn.disabled = false; });
                 
             }, 800);
         }
         
         function updateScore() {
-            scoreEl.innerHTML = `
-                Счёт: <span class="player-score">Ты ${playerScore}</span> | 
-                <span class="computer-score">Компьютер ${computerScore}</span> | 
-                <span class="ties-score">Ничьих ${ties}</span>
-            `;
+            scoreEl.innerHTML = 'Счёт: <span class="player-score">Ты ' + playerScore + '</span> | <span class="computer-score">Компьютер ' + computerScore + '</span> | <span class="ties-score">Ничьих ' + ties + '</span>';
         }
         
         function resetGame() {
@@ -388,8 +383,7 @@
             computerScore = 0;
             ties = 0;
             
-            document.querySelector('.computer-choice').innerHTML = 
-                '🤖 <span class="emoji">❓</span> Компьютер думает...';
+            document.querySelector('.computer-choice').innerHTML = '🤖 <span class="emoji">❓</span> Компьютер думает...';
             resultEl.textContent = 'Сделай выбор!';
             resultEl.style.color = '#333';
             statusEl.textContent = '🔄 Счёт сброшен!';
@@ -397,7 +391,7 @@
         }
         
         document.addEventListener('keydown', function(e) {
-            const key = e.key;
+            var key = e.key;
             if (key === '1') play('камень');
             else if (key === '2') play('ножницы');
             else if (key === '3') play('бумага');
