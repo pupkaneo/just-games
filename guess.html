@@ -16,43 +16,146 @@
     <meta name="copyright" content="Дакиев Руслан, 2024">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
     <style>
+        :root {
+            --bg-body: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --bg-container: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --border-color: #eee;
+            --shadow: 0 10px 40px rgba(0,0,0,0.3);
+            --input-border: #ddd;
+            --btn-bg: #f5576c;
+            --btn-hover: #d9445a;
+            --slider-bg: #ccc;
+        }
+        
+        [data-theme="dark"] {
+            --bg-body: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --bg-container: #1e1e2e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #aaaaaa;
+            --text-muted: #777777;
+            --border-color: #3a3a5e;
+            --shadow: 0 10px 40px rgba(0,0,0,0.7);
+            --input-border: #3a3a5e;
+            --btn-bg: #f5576c;
+            --btn-hover: #d9445a;
+            --slider-bg: #4a4a6e;
+        }
+        
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: var(--bg-body);
             margin: 0;
             padding: 40px;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: background 0.5s ease;
         }
         
         .container {
             max-width: 550px;
             margin: 0 auto;
-            background: white;
+            background: var(--bg-container);
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            box-shadow: var(--shadow);
             text-align: center;
+            transition: background 0.4s ease, box-shadow 0.4s ease;
         }
         
-        .logo {
-            font-size: 40px;
-            display: block;
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
             margin-bottom: 5px;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header-left .logo {
+            font-size: 30px;
         }
         
         h1 {
-            color: #333;
-            font-size: 28px;
-            margin-bottom: 5px;
+            color: var(--text-primary);
+            font-size: 24px;
+            margin: 0;
+            transition: color 0.3s;
+        }
+        
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .theme-switch-wrapper .icon {
+            font-size: 18px;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+        
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--slider-bg);
+            transition: 0.4s;
+            border-radius: 24px;
+        }
+        
+        .slider::before {
+            content: "";
+            position: absolute;
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+        
+        input:checked + .slider::before {
+            transform: translateX(24px);
         }
         
         .subtitle {
-            color: #666;
+            color: var(--text-secondary);
             font-size: 16px;
             margin-bottom: 5px;
+            transition: color 0.3s;
         }
         
         .range-badge {
@@ -74,10 +177,12 @@
             padding: 12px 20px;
             font-size: 20px;
             width: 180px;
-            border: 2px solid #ddd;
+            border: 2px solid var(--input-border);
             border-radius: 10px;
             text-align: center;
             transition: border-color 0.3s;
+            background: var(--bg-container);
+            color: var(--text-primary);
         }
         
         input:focus {
@@ -88,7 +193,7 @@
         button {
             padding: 12px 30px;
             font-size: 18px;
-            background: #f5576c;
+            background: var(--btn-bg);
             color: white;
             border: none;
             border-radius: 10px;
@@ -98,7 +203,7 @@
         }
         
         button:hover {
-            background: #d9445a;
+            background: var(--btn-hover);
             transform: scale(1.05);
         }
         
@@ -121,12 +226,15 @@
             border-radius: 10px;
             min-height: 60px;
             font-weight: bold;
+            color: var(--text-primary);
+            transition: color 0.3s;
         }
         
         .attempts {
-            color: #666;
+            color: var(--text-secondary);
             font-size: 16px;
             margin-bottom: 10px;
+            transition: color 0.3s;
         }
         
         .progress-bar {
@@ -147,9 +255,10 @@
         }
         
         .hint {
-            color: #999;
+            color: var(--text-muted);
             font-size: 14px;
             margin-top: 10px;
+            transition: color 0.3s;
         }
         
         .back-btn {
@@ -164,74 +273,78 @@
         .footer {
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 2px solid #eee;
-            color: #999;
+            border-top: 2px solid var(--border-color);
+            color: var(--text-muted);
             font-size: 12px;
+            transition: border-color 0.3s, color 0.3s;
         }
         
-        .win {
-            color: #28a745;
-        }
-        
-        .lose {
-            color: #dc3545;
-        }
-        
-        .hint-text {
-            color: #f5576c;
-        }
+        .win { color: #28a745; }
+        .lose { color: #dc3545; }
+        .hint-text { color: #f5576c; }
     </style>
 </head>
 <body>
     <div class="container">
-        <span class="logo">🎮</span>
-        <h1>GameZone — Угадай число</h1>
+        <div class="header">
+            <div class="header-left">
+                <span class="logo">🎮</span>
+                <h1>Угадай число</h1>
+            </div>
+            <div class="theme-switch-wrapper">
+                <span class="icon">☀️</span>
+                <label class="theme-switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="icon">🌙</span>
+            </div>
+        </div>
         <div class="range-badge">🎯 от 1 до 1000</div>
         <p class="subtitle">У тебя 10 попыток!</p>
-        
         <div class="input-area">
             <input type="number" id="guessInput" min="1" max="1000" placeholder="1-1000">
             <br><br>
             <button onclick="checkGuess()">✅ Проверить</button>
             <button class="btn-new" onclick="newGame()">🔄 Новая игра</button>
         </div>
-        
         <div class="attempts" id="attempts">Попыток: 0 из 10</div>
-        
         <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
         </div>
-        
         <div class="message" id="message">💡 Введи число от 1 до 1000</div>
         <div class="hint" id="hint">⬆️ ⬇️</div>
-        
         <button class="back-btn" onclick="window.location.href='index.html'">🏠 На главную</button>
-        
-        <div class="footer">
-            © 2024 Все права защищены. GameZone
-        </div>
+        <div class="footer">© 2024 Все права защищены. GameZone</div>
     </div>
-    
     <script>
-        // ============================================================
-        // Автор: Дакиев Руслан
-        // Игра: Угадай число (1-1000, 10 попыток)
-        // ============================================================
+        var toggle = document.getElementById('themeToggle');
+        var currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            toggle.checked = true;
+        }
+        toggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        });
         
-        const MIN_NUMBER = 1;
-        const MAX_NUMBER = 1000;
-        const MAX_ATTEMPTS = 10;
-        
-        let secretNumber = Math.floor(Math.random() * (MAX_NUMBER - MIN_NUMBER + 1)) + MIN_NUMBER;
-        let attempts = 0;
-        let gameOver = false;
-        let lastGuess = null;
-        
-        const input = document.getElementById('guessInput');
-        const messageEl = document.getElementById('message');
-        const attemptsEl = document.getElementById('attempts');
-        const progressFill = document.getElementById('progressFill');
-        const hintEl = document.getElementById('hint');
+        var MIN_NUMBER = 1;
+        var MAX_NUMBER = 1000;
+        var MAX_ATTEMPTS = 10;
+        var secretNumber = Math.floor(Math.random() * (MAX_NUMBER - MIN_NUMBER + 1)) + MIN_NUMBER;
+        var attempts = 0;
+        var gameOver = false;
+        var input = document.getElementById('guessInput');
+        var messageEl = document.getElementById('message');
+        var attemptsEl = document.getElementById('attempts');
+        var progressFill = document.getElementById('progressFill');
+        var hintEl = document.getElementById('hint');
         
         function checkGuess() {
             if (gameOver) {
@@ -239,68 +352,56 @@
                 messageEl.className = 'message lose';
                 return;
             }
-            
-            const guess = parseInt(input.value);
-            
+            var guess = parseInt(input.value);
             if (input.value === '') {
                 messageEl.innerHTML = '⚠️ Введи число!';
                 messageEl.className = 'message';
                 return;
             }
-            
             if (isNaN(guess)) {
                 messageEl.innerHTML = '⚠️ Это не число!';
                 messageEl.className = 'message';
                 input.value = '';
                 return;
             }
-            
             if (guess < MIN_NUMBER || guess > MAX_NUMBER) {
-                messageEl.innerHTML = `⚠️ Число должно быть от ${MIN_NUMBER} до ${MAX_NUMBER}!`;
+                messageEl.innerHTML = '⚠️ Число должно быть от ' + MIN_NUMBER + ' до ' + MAX_NUMBER + '!';
                 messageEl.className = 'message';
                 input.value = '';
                 return;
             }
-            
             attempts++;
-            lastGuess = guess;
             updateUI();
-            
             if (guess === secretNumber) {
-                messageEl.innerHTML = `🎉🎉🎉 Ты угадал! Это было число ${secretNumber}! Поздравляю! 🎉🎉🎉`;
+                messageEl.innerHTML = '🎉🎉🎉 Ты угадал! Это было число ' + secretNumber + '! Поздравляю! 🎉🎉🎉';
                 messageEl.className = 'message win';
                 gameOver = true;
                 hintEl.textContent = '🏆 Ты победил!';
                 return;
             }
-            
             if (guess < secretNumber) {
-                messageEl.innerHTML = `📈 Загаданное число БОЛЬШЕ, чем ${guess}`;
+                messageEl.innerHTML = '📈 Загаданное число БОЛЬШЕ, чем ' + guess;
                 messageEl.className = 'message hint-text';
                 hintEl.textContent = '⬆️ Попробуй число побольше';
             } else {
-                messageEl.innerHTML = `📉 Загаданное число МЕНЬШЕ, чем ${guess}`;
+                messageEl.innerHTML = '📉 Загаданное число МЕНЬШЕ, чем ' + guess;
                 messageEl.className = 'message hint-text';
                 hintEl.textContent = '⬇️ Попробуй число поменьше';
             }
-            
             if (attempts >= MAX_ATTEMPTS) {
-                messageEl.innerHTML = `😢 Ты проиграл! Я загадал число ${secretNumber}. Попробуй ещё раз!`;
+                messageEl.innerHTML = '😢 Ты проиграл! Я загадал число ' + secretNumber + '. Попробуй ещё раз!';
                 messageEl.className = 'message lose';
                 gameOver = true;
                 hintEl.textContent = '💪 Не сдавайся! Новая игра — новый шанс!';
             }
-            
             input.value = '';
             input.focus();
         }
         
         function updateUI() {
-            attemptsEl.textContent = `Попыток: ${attempts} из ${MAX_ATTEMPTS}`;
-            
-            const progress = ((MAX_ATTEMPTS - attempts) / MAX_ATTEMPTS) * 100;
-            progressFill.style.width = `${progress}%`;
-            
+            attemptsEl.textContent = 'Попыток: ' + attempts + ' из ' + MAX_ATTEMPTS;
+            var progress = ((MAX_ATTEMPTS - attempts) / MAX_ATTEMPTS) * 100;
+            progressFill.style.width = progress + '%';
             if (attempts >= 8) {
                 progressFill.style.background = 'linear-gradient(90deg, #f5576c, #ff6b6b)';
             } else if (attempts >= 5) {
@@ -314,14 +415,12 @@
             secretNumber = Math.floor(Math.random() * (MAX_NUMBER - MIN_NUMBER + 1)) + MIN_NUMBER;
             attempts = 0;
             gameOver = false;
-            lastGuess = null;
-            
             messageEl.innerHTML = '🔄 Новая игра! Введи число от 1 до 1000';
             messageEl.className = 'message';
             hintEl.textContent = '⬆️ ⬇️';
             progressFill.style.width = '100%';
             progressFill.style.background = 'linear-gradient(90deg, #4facfe, #00f2fe)';
-            attemptsEl.textContent = `Попыток: 0 из ${MAX_ATTEMPTS}`;
+            attemptsEl.textContent = 'Попыток: 0 из ' + MAX_ATTEMPTS;
             input.value = '';
             input.focus();
         }
