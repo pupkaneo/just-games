@@ -14,7 +14,6 @@
     <title>Игровая библиотека</title>
     <meta name="author" content="Дакиев Руслан">
     <meta name="copyright" content="Дакиев Руслан, 2024">
-    <meta name="description" content="Игровая библиотека: Угадай число, Камень-ножницы-бумага, Крестики-нолики">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -108,28 +107,32 @@
         <p class="subtitle">Добро пожаловать! Выбери игру и начни играть прямо в браузере</p>
         
         <div class="games-grid">
+            <!-- Угадай число -->
             <div class="game-card" onclick="window.location.href='guess.html'">
                 <span class="game-icon">🔢</span>
                 <div class="game-title">Угадай число</div>
                 <div class="game-desc">Угадай число от 1 до 1000 за 10 попыток</div>
             </div>
             
+            <!-- Камень-ножницы-бумага (ведёт на выбор режима) -->
             <div class="game-card" onclick="window.location.href='rps.html'">
                 <span class="game-icon">✊</span>
                 <div class="game-title">Камень-ножницы-бумага</div>
-                <div class="game-desc">Сразись с компьютером в классическую игру</div>
+                <div class="game-desc">Выбери режим: классический или расширенный</div>
             </div>
             
-            <div class="game-card" onclick="window.location.href='rpsls.html'">
-                <span class="game-icon">🦎</span>
-                <div class="game-title">Камень-ножницы-бумага-ящерица-Спок</div>
-                <div class="game-desc">Расширенная версия с 5 вариантами</div>
-            </div>
-            
+            <!-- Крестики-нолики -->
             <div class="game-card" onclick="window.location.href='tictac.html'">
                 <span class="game-icon">❌</span>
                 <div class="game-title">Крестики-нолики</div>
                 <div class="game-desc">Сыграй с другом или компьютером</div>
+            </div>
+            
+            <!-- Скоро -->
+            <div class="game-card coming-soon">
+                <span class="game-icon">❓</span>
+                <div class="game-title">Скоро!</div>
+                <div class="game-desc">Новая игра уже в разработке</div>
             </div>
         </div>
         
