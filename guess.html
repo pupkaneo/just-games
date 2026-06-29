@@ -1,7 +1,7 @@
 <!--
     ============================================================
     Автор: Дакиев Руслан
-    Название: Игра "Угадай число"
+    Название: GameZone — Угадай число
     Год: 2024
     Все права защищены.
     ============================================================
@@ -11,9 +11,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Угадай число</title>
+    <title>GameZone — Угадай число</title>
     <meta name="author" content="Дакиев Руслан">
     <meta name="copyright" content="Дакиев Руслан, 2024">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -34,6 +35,12 @@
             border-radius: 20px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.3);
             text-align: center;
+        }
+        
+        .logo {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 5px;
         }
         
         h1 {
@@ -177,7 +184,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>🔢 Угадай число</h1>
+        <span class="logo">🎮</span>
+        <h1>GameZone — Угадай число</h1>
         <div class="range-badge">🎯 от 1 до 1000</div>
         <p class="subtitle">У тебя 10 попыток!</p>
         
@@ -200,7 +208,7 @@
         <button class="back-btn" onclick="window.location.href='index.html'">🏠 На главную</button>
         
         <div class="footer">
-            © 2024 Все права защищены.
+            © 2024 Все права защищены. GameZone
         </div>
     </div>
     
