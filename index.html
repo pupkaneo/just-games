@@ -11,9 +11,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Игровая библиотека</title>
+    <title>GameZone — твой игровой портал</title>
     <meta name="author" content="Дакиев Руслан">
     <meta name="copyright" content="Дакиев Руслан, 2024">
+    <meta name="description" content="Игровой портал: Угадай число, Камень-ножницы-бумага, Крестики-нолики">
+    
+    <!-- Иконка сайта (favicon) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,11 +37,27 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
         
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 5px;
+        }
+        
+        .header .logo {
+            font-size: 48px;
+        }
+        
         h1 {
             text-align: center;
             color: #333;
-            font-size: 36px;
-            margin-bottom: 10px;
+            font-size: 38px;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .subtitle {
@@ -44,6 +65,7 @@
             color: #666;
             font-size: 18px;
             margin-bottom: 30px;
+            margin-top: 5px;
         }
         
         .games-grid {
@@ -58,37 +80,59 @@
             border-radius: 15px;
             text-align: center;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.3s;
             border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
         }
         
         .game-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             border-color: #667eea;
         }
         
-        .game-icon {
+        .game-card:active {
+            transform: scale(0.95);
+        }
+        
+        .game-card .game-icon {
             font-size: 50px;
             display: block;
             margin-bottom: 10px;
         }
         
-        .game-title {
+        .game-card .game-title {
             font-size: 20px;
             font-weight: bold;
             color: #333;
         }
         
-        .game-desc {
+        .game-card .game-desc {
             color: #666;
             font-size: 14px;
             margin-top: 5px;
         }
         
-        .coming-soon {
+        .game-card .card-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            font-size: 10px;
+            padding: 2px 10px;
+            border-radius: 10px;
+            margin-top: 8px;
+        }
+        
+        .game-card.coming-soon {
             opacity: 0.6;
             cursor: not-allowed;
+        }
+        
+        .game-card.coming-soon:hover {
+            transform: none;
+            box-shadow: none;
+            border-color: transparent;
         }
         
         .footer {
@@ -99,12 +143,26 @@
             color: #999;
             font-size: 12px;
         }
+        
+        .footer .version {
+            color: #ccc;
+            font-size: 11px;
+        }
+        
+        @media (max-width: 600px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🎮 Игровая библиотека</h1>
-        <p class="subtitle">Добро пожаловать! Выбери игру и начни играть прямо в браузере</p>
+        <div class="header">
+            <span class="logo">🎮</span>
+            <h1>GameZone</h1>
+        </div>
+        <p class="subtitle">⚡ Твой игровой портал — играй прямо в браузере!</p>
         
         <div class="games-grid">
             <!-- Угадай число -->
@@ -112,32 +170,37 @@
                 <span class="game-icon">🔢</span>
                 <div class="game-title">Угадай число</div>
                 <div class="game-desc">Угадай число от 1 до 1000 за 10 попыток</div>
+                <span class="card-badge">🧠 Логика</span>
             </div>
             
-            <!-- Камень-ножницы-бумага (ведёт на выбор режима) -->
+            <!-- Камень-ножницы-бумага -->
             <div class="game-card" onclick="window.location.href='rps.html'">
                 <span class="game-icon">✊</span>
                 <div class="game-title">Камень-ножницы-бумага</div>
-                <div class="game-desc">Выбери режим: классический или расширенный</div>
+                <div class="game-desc">Классика или расширенная версия — выбирай!</div>
+                <span class="card-badge">🤖 С компьютером</span>
             </div>
             
             <!-- Крестики-нолики -->
             <div class="game-card" onclick="window.location.href='tictac.html'">
                 <span class="game-icon">❌</span>
                 <div class="game-title">Крестики-нолики</div>
-                <div class="game-desc">Сыграй с другом или компьютером</div>
+                <div class="game-desc">Сыграй с другом или против компьютера</div>
+                <span class="card-badge">🏆 Стратегия</span>
             </div>
             
             <!-- Скоро -->
             <div class="game-card coming-soon">
-                <span class="game-icon">❓</span>
+                <span class="game-icon">🚀</span>
                 <div class="game-title">Скоро!</div>
-                <div class="game-desc">Новая игра уже в разработке</div>
+                <div class="game-desc">Новые игры уже в разработке</div>
+                <span class="card-badge">⏳ В разработке</span>
             </div>
         </div>
         
         <div class="footer">
-            © 2024 Все права защищены.
+            <p>© 2024 Все права защищены.</p>
+            <p class="version">GameZone v2.0</p>
         </div>
     </div>
 </body>
