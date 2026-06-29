@@ -29,150 +29,107 @@
         
         .container {
             max-width: 500px;
+            margin: 0 auto;
             background: white;
-            padding: 40px;
+            padding: 50px;
             border-radius: 20px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.3);
             text-align: center;
         }
         
         .logo {
-            font-size: 30px;
+            font-size: 40px;
             display: block;
             margin-bottom: 5px;
         }
         
         h1 {
             color: #333;
+            font-size: 32px;
             margin-bottom: 5px;
-            font-size: 28px;
         }
         
-        .badge {
-            display: inline-block;
-            background: #4facfe;
-            color: white;
-            padding: 4px 15px;
-            border-radius: 20px;
-            font-size: 12px;
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .mode-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .mode-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+        
+        .mode-card:hover {
+            transform: scale(1.02);
+            border-color: #4facfe;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .mode-card .icon {
+            font-size: 50px;
+            display: block;
             margin-bottom: 10px;
         }
         
-        .status {
-            font-size: 20px;
+        .mode-card .title {
+            font-size: 22px;
             font-weight: bold;
-            margin: 15px 0;
-            min-height: 30px;
             color: #333;
         }
         
-        .board {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 20px auto;
-            max-width: 350px;
+        .mode-card .desc {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
         }
         
-        .cell {
-            aspect-ratio: 1;
-            background: #f8f9fa;
-            border: 3px solid #ddd;
-            border-radius: 15px;
-            font-size: 60px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            color: #333;
+        .mode-card .features {
+            color: #888;
+            font-size: 13px;
+            margin-top: 8px;
+            background: white;
+            padding: 8px;
+            border-radius: 8px;
         }
         
-        .cell:hover:not(.taken) {
-            background: #e9ecef;
-            transform: scale(1.03);
-            border-color: #4facfe;
+        .mode-card.bot {
+            background: #e3f2fd;
         }
         
-        .cell.taken {
-            cursor: not-allowed;
+        .mode-card.bot:hover {
+            border-color: #2196f3;
         }
         
-        .cell.x {
-            color: #4facfe;
+        .mode-card.player {
+            background: #fce4ec;
         }
         
-        .cell.o {
-            color: #f5576c;
+        .mode-card.player:hover {
+            border-color: #e91e63;
         }
         
-        .cell.win-cell {
-            background: #d4edda;
-            border-color: #28a745;
-            animation: winPulse 0.5s ease-in-out 3;
-        }
-        
-        @keyframes winPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-        
-        .score {
-            display: flex;
-            justify-content: space-around;
-            margin: 20px 0;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        
-        .score .x-score {
-            color: #4facfe;
-        }
-        
-        .score .o-score {
-            color: #f5576c;
-        }
-        
-        .score .draw-score {
-            color: #6c757d;
-        }
-        
-        button {
+        .back-btn {
             padding: 12px 30px;
             font-size: 16px;
+            background: #6c757d;
+            color: white;
             border: none;
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s;
-            margin: 5px;
-            font-weight: bold;
-        }
-        
-        .btn-reset {
-            background: #6c757d;
-            color: white;
-        }
-        
-        .btn-reset:hover {
-            background: #5a6268;
-            transform: scale(1.05);
-        }
-        
-        .btn-new {
-            background: #28a745;
-            color: white;
-        }
-        
-        .btn-new:hover {
-            background: #218838;
-            transform: scale(1.05);
-        }
-        
-        .back-btn {
-            background: #6c757d;
-            color: white;
-            margin-top: 15px;
+            margin-top: 20px;
         }
         
         .back-btn:hover {
@@ -187,47 +144,28 @@
             color: #999;
             font-size: 12px;
         }
-        
-        .winner-text {
-            font-size: 24px;
-            animation: winText 0.5s ease-in-out 3;
-        }
-        
-        @keyframes winText {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <span class="logo">🎮</span>
         <h1>GameZone</h1>
-        <div class="badge">Крестики-нолики</div>
+        <p class="subtitle">❌ Крестики-нолики — выбери режим</p>
         
-        <div class="status" id="status">Ход: <span style="color:#4facfe;">X</span></div>
-        
-        <div class="board" id="board">
-            <div class="cell" data-index="0" onclick="makeMove(0)"></div>
-            <div class="cell" data-index="1" onclick="makeMove(1)"></div>
-            <div class="cell" data-index="2" onclick="makeMove(2)"></div>
-            <div class="cell" data-index="3" onclick="makeMove(3)"></div>
-            <div class="cell" data-index="4" onclick="makeMove(4)"></div>
-            <div class="cell" data-index="5" onclick="makeMove(5)"></div>
-            <div class="cell" data-index="6" onclick="makeMove(6)"></div>
-            <div class="cell" data-index="7" onclick="makeMove(7)"></div>
-            <div class="cell" data-index="8" onclick="makeMove(8)"></div>
-        </div>
-        
-        <div class="score">
-            <span class="x-score">❌ X: <span id="xScore">0</span></span>
-            <span class="draw-score">🤝 Ничьи: <span id="drawScore">0</span></span>
-            <span class="o-score">⭕ O: <span id="oScore">0</span></span>
-        </div>
-        
-        <div>
-            <button class="btn-new" onclick="newGame()">🔄 Новая игра</button>
-            <button class="btn-reset" onclick="resetScore()">📊 Сбросить счёт</button>
+        <div class="mode-grid">
+            <div class="mode-card bot" onclick="window.location.href='tictac-bot.html'">
+                <span class="icon">🤖</span>
+                <div class="title">Игра с ботом</div>
+                <div class="desc">Сразитесь с умным компьютером</div>
+                <div class="features">🧠 Бот выбирает лучший ход • 🤖 Сложность возрастает</div>
+            </div>
+            
+            <div class="mode-card player" onclick="window.location.href='tictac-player.html'">
+                <span class="icon">👥</span>
+                <div class="title">Игра с игроком</div>
+                <div class="desc">Играйте с другом на одном устройстве</div>
+                <div class="features">👫 По очереди • 🏆 Кто первый выиграет</div>
+            </div>
         </div>
         
         <button class="back-btn" onclick="window.location.href='index.html'">🏠 На главную</button>
@@ -236,120 +174,5 @@
             © 2024 Все права защищены. GameZone
         </div>
     </div>
-    
-    <script>
-        // ============================================================
-        // Автор: Дакиев Руслан
-        // Игра: Крестики-нолики
-        // ============================================================
-        
-        let board = Array(9).fill(null);
-        let currentPlayer = 'X';
-        let gameActive = true;
-        let xScore = 0;
-        let oScore = 0;
-        let drawScore = 0;
-        
-        const winPatterns = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],
-            [0, 4, 8], [2, 4, 6]
-        ];
-        
-        const cells = document.querySelectorAll('.cell');
-        const statusEl = document.getElementById('status');
-        const xScoreEl = document.getElementById('xScore');
-        const oScoreEl = document.getElementById('oScore');
-        const drawScoreEl = document.getElementById('drawScore');
-        
-        function makeMove(index) {
-            if (!gameActive) {
-                statusEl.textContent = '⛔ Игра окончена! Нажми "Новая игра"';
-                return;
-            }
-            
-            if (board[index] !== null) {
-                statusEl.textContent = '⛔ Эта клетка уже занята!';
-                return;
-            }
-            
-            board[index] = currentPlayer;
-            cells[index].textContent = currentPlayer;
-            cells[index].classList.add('taken', currentPlayer.toLowerCase());
-            
-            if (checkWin(currentPlayer)) {
-                highlightWin(currentPlayer);
-                statusEl.innerHTML = `🏆 Победил <span style="color:${currentPlayer === 'X' ? '#4facfe' : '#f5576c'};font-size:28px;">${currentPlayer}</span>! 🎉`;
-                statusEl.className = 'status winner-text';
-                gameActive = false;
-                updateScore(currentPlayer);
-                return;
-            }
-            
-            if (board.every(cell => cell !== null)) {
-                statusEl.textContent = '🤝 Ничья!';
-                statusEl.className = 'status';
-                gameActive = false;
-                drawScore++;
-                updateScoreDisplay();
-                return;
-            }
-            
-            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-            statusEl.innerHTML = `Ход: <span style="color:${currentPlayer === 'X' ? '#4facfe' : '#f5576c'};">${currentPlayer}</span>`;
-            statusEl.className = 'status';
-        }
-        
-        function checkWin(player) {
-            return winPatterns.some(pattern => {
-                return pattern.every(index => board[index] === player);
-            });
-        }
-        
-        function highlightWin(player) {
-            winPatterns.forEach(pattern => {
-                if (pattern.every(index => board[index] === player)) {
-                    pattern.forEach(index => {
-                        cells[index].classList.add('win-cell');
-                    });
-                }
-            });
-        }
-        
-        function updateScore(player) {
-            if (player === 'X') xScore++;
-            else oScore++;
-            updateScoreDisplay();
-        }
-        
-        function updateScoreDisplay() {
-            xScoreEl.textContent = xScore;
-            oScoreEl.textContent = oScore;
-            drawScoreEl.textContent = drawScore;
-        }
-        
-        function newGame() {
-            board = Array(9).fill(null);
-            currentPlayer = 'X';
-            gameActive = true;
-            
-            cells.forEach(cell => {
-                cell.textContent = '';
-                cell.className = 'cell';
-            });
-            
-            statusEl.innerHTML = `Ход: <span style="color:#4facfe;">X</span>`;
-            statusEl.className = 'status';
-        }
-        
-        function resetScore() {
-            xScore = 0;
-            oScore = 0;
-            drawScore = 0;
-            updateScoreDisplay();
-            newGame();
-            statusEl.textContent = '📊 Счёт сброшен! Начинаем заново!';
-        }
-    </script>
 </body>
 </html>
