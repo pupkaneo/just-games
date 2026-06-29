@@ -1,7 +1,7 @@
 <!--
     ============================================================
     Автор: Дакиев Руслан
-    Название: Камень-ножницы-бумага-ящерица-Спок
+    Название: Игра "Камень-ножницы-бумага"
     Год: 2024
     Все права защищены.
     ============================================================
@@ -11,13 +11,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Камень-ножницы-бумага-ящерица-Спок</title>
+    <title>Камень-ножницы-бумага</title>
     <meta name="author" content="Дакиев Руслан">
     <meta name="copyright" content="Дакиев Руслан, 2024">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             margin: 0;
             padding: 40px;
             min-height: 100vh;
@@ -27,7 +27,7 @@
         }
         
         .container {
-            max-width: 700px;
+            max-width: 600px;
             margin: 0 auto;
             background: white;
             padding: 40px;
@@ -38,8 +38,7 @@
         
         h1 {
             color: #333;
-            font-size: 26px;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
         
         .status {
@@ -51,25 +50,26 @@
         .choices {
             display: flex;
             justify-content: center;
-            gap: 12px;
+            gap: 15px;
             margin: 25px 0;
             flex-wrap: wrap;
         }
         
         .choice-btn {
-            font-size: 32px;
-            padding: 15px 20px;
+            font-size: 40px;
+            padding: 20px 30px;
             border: 3px solid #ddd;
             border-radius: 15px;
             background: white;
             cursor: pointer;
             transition: all 0.3s;
-            min-width: 80px;
+            min-width: 100px;
+            position: relative;
         }
         
         .choice-btn:hover:not(:disabled) {
             transform: scale(1.1);
-            border-color: #f5576c;
+            border-color: #667eea;
             background: #f0f0ff;
         }
         
@@ -85,9 +85,9 @@
         
         .choice-btn .btn-label {
             display: block;
-            font-size: 11px;
+            font-size: 12px;
             color: #666;
-            margin-top: 3px;
+            margin-top: 5px;
         }
         
         .result-area {
@@ -184,51 +184,26 @@
             color: #999;
             font-size: 12px;
         }
-        
-        .rules-hint {
-            font-size: 13px;
-            color: #888;
-            margin: 10px 0;
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 10px;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🦎 Камень-ножницы-бумага-ящерица-Спок</h1>
+        <h1>✊ Камень-ножницы-бумага ✋</h1>
         <div class="status" id="status">Готов к игре!</div>
         
         <div class="choices">
-            <button class="choice-btn" onclick="play('камень')">
+            <button class="choice-btn" data-choice="камень" onclick="play('камень')">
                 🪨
                 <span class="btn-label">Камень</span>
             </button>
-            <button class="choice-btn" onclick="play('ножницы')">
+            <button class="choice-btn" data-choice="ножницы" onclick="play('ножницы')">
                 ✂️
                 <span class="btn-label">Ножницы</span>
             </button>
-            <button class="choice-btn" onclick="play('бумага')">
+            <button class="choice-btn" data-choice="бумага" onclick="play('бумага')">
                 📄
                 <span class="btn-label">Бумага</span>
             </button>
-            <button class="choice-btn" onclick="play('ящерица')">
-                🦎
-                <span class="btn-label">Ящерица</span>
-            </button>
-            <button class="choice-btn" onclick="play('спок')">
-                🖖
-                <span class="btn-label">Спок</span>
-            </button>
-        </div>
-        
-        <div class="rules-hint">
-            🔹 Камень бьёт ножницы и ящерицу<br>
-            🔹 Ножницы режут бумагу и обезглавливают ящерицу<br>
-            🔹 Бумага накрывает камень и опровергает Спока<br>
-            🔹 Ящерица ест бумагу и отравляет Спока<br>
-            🔹 Спок разбивает камень и ломает ножницы
         </div>
         
         <div class="result-area">
@@ -256,7 +231,7 @@
     <script>
         // ============================================================
         // Автор: Дакиев Руслан
-        // Игра: Камень-ножницы-бумага-ящерица-Спок
+        // Игра: Камень-ножницы-бумага
         // ============================================================
         
         let playerScore = 0;
@@ -264,21 +239,16 @@
         let ties = 0;
         let isPlaying = false;
         
-        // Правила: что кого побеждает
         const rules = {
-            'камень': ['ножницы', 'ящерица'],
-            'ножницы': ['бумага', 'ящерица'],
-            'бумага': ['камень', 'спок'],
-            'ящерица': ['бумага', 'спок'],
-            'спок': ['камень', 'ножницы']
+            'камень': 'ножницы',
+            'ножницы': 'бумага',
+            'бумага': 'камень'
         };
         
-        const emojis = {
+        const emojisBig = {
             'камень': '🪨',
             'ножницы': '✂️',
-            'бумага': '📄',
-            'ящерица': '🦎',
-            'спок': '🖖'
+            'бумага': '📄'
         };
         
         const computerChoiceEl = document.getElementById('computerChoice');
@@ -304,13 +274,13 @@
             resultEl.style.color = '#666';
             
             setTimeout(() => {
-                const choices = ['камень', 'ножницы', 'бумага', 'ящерица', 'спок'];
-                const computerChoice = choices[Math.floor(Math.random() * 5)];
+                const choices = ['камень', 'ножницы', 'бумага'];
+                const computerChoice = choices[Math.floor(Math.random() * 3)];
                 
-                emojiSpan.textContent = emojis[computerChoice];
+                emojiSpan.textContent = emojisBig[computerChoice];
                 emojiSpan.className = 'emoji';
                 document.querySelector('.computer-choice').innerHTML = 
-                    `🤖 <span class="emoji">${emojis[computerChoice]}</span> Компьютер выбрал: <strong>${computerChoice}</strong>`;
+                    `🤖 <span class="emoji">${emojisBig[computerChoice]}</span> Компьютер выбрал: <strong>${computerChoice}</strong>`;
                 
                 let result = '';
                 let resultColor = '#333';
@@ -319,7 +289,7 @@
                     result = '🤝 Ничья!';
                     ties++;
                     resultColor = '#ffc107';
-                } else if (rules[playerChoice].includes(computerChoice)) {
+                } else if (rules[playerChoice] === computerChoice) {
                     result = '🎉 Ты победил!';
                     playerScore++;
                     resultColor = '#28a745';
@@ -369,8 +339,6 @@
             if (key === '1') play('камень');
             else if (key === '2') play('ножницы');
             else if (key === '3') play('бумага');
-            else if (key === '4') play('ящерица');
-            else if (key === '5') play('спок');
         });
     </script>
 </body>
