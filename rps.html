@@ -1,0 +1,172 @@
+<!--
+    ============================================================
+    Автор: Дакиев Руслан
+    Название: Камень-ножницы-бумага — выбор режима
+    Год: 2024
+    Все права защищены.
+    ============================================================
+-->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Камень-ножницы-бумага</title>
+    <meta name="author" content="Дакиев Руслан">
+    <meta name="copyright" content="Дакиев Руслан, 2024">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 40px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .mode-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .mode-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+        
+        .mode-card:hover {
+            transform: scale(1.02);
+            border-color: #667eea;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .mode-card .icon {
+            font-size: 50px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .mode-card .title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .mode-card .desc {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .mode-card .features {
+            color: #888;
+            font-size: 13px;
+            margin-top: 8px;
+            background: white;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        
+        .mode-card.classic {
+            background: #e3f2fd;
+        }
+        
+        .mode-card.classic:hover {
+            border-color: #2196f3;
+        }
+        
+        .mode-card.advanced {
+            background: #fce4ec;
+        }
+        
+        .mode-card.advanced:hover {
+            border-color: #e91e63;
+        }
+        
+        .back-btn {
+            padding: 12px 30px;
+            font-size: 16px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        .back-btn:hover {
+            background: #5a6268;
+            transform: scale(1.05);
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✊ Камень-ножницы-бумага</h1>
+        <p class="subtitle">Выбери режим игры</p>
+        
+        <div class="mode-grid">
+            <!-- Классическая версия -->
+            <div class="mode-card classic" onclick="window.location.href='rps-classic.html'">
+                <span class="icon">✊</span>
+                <div class="title">Классическая версия</div>
+                <div class="desc">Три варианта: камень, ножницы, бумага</div>
+                <div class="features">✅ Простые правила • ✅ Быстрая игра • ✅ 3 варианта</div>
+            </div>
+            
+            <!-- Расширенная версия -->
+            <div class="mode-card advanced" onclick="window.location.href='rpsls.html'">
+                <span class="icon">🦎</span>
+                <div class="title">Расширенная версия</div>
+                <div class="desc">Пять вариантов: камень, ножницы, бумага, ящерица, Спок</div>
+                <div class="features">🔥 Сложнее • 🔥 Интереснее • 🔥 5 вариантов</div>
+            </div>
+        </div>
+        
+        <button class="back-btn" onclick="window.location.href='index.html'">🏠 На главную</button>
+        
+        <div class="footer">
+            © 2024 Все права защищены.
+        </div>
+    </div>
+</body>
+</html>

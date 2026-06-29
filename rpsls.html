@@ -1,0 +1,377 @@
+<!--
+    ============================================================
+    Автор: Дакиев Руслан
+    Название: Камень-ножницы-бумага-ящерица-Спок
+    Год: 2024
+    Все права защищены.
+    ============================================================
+-->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Камень-ножницы-бумага-ящерица-Спок</title>
+    <meta name="author" content="Дакиев Руслан">
+    <meta name="copyright" content="Дакиев Руслан, 2024">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            margin: 0;
+            padding: 40px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 26px;
+            margin-bottom: 5px;
+        }
+        
+        .status {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .choices {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        
+        .choice-btn {
+            font-size: 32px;
+            padding: 15px 20px;
+            border: 3px solid #ddd;
+            border-radius: 15px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 80px;
+        }
+        
+        .choice-btn:hover:not(:disabled) {
+            transform: scale(1.1);
+            border-color: #f5576c;
+            background: #f0f0ff;
+        }
+        
+        .choice-btn:active:not(:disabled) {
+            transform: scale(0.9);
+        }
+        
+        .choice-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: scale(0.95);
+        }
+        
+        .choice-btn .btn-label {
+            display: block;
+            font-size: 11px;
+            color: #666;
+            margin-top: 3px;
+        }
+        
+        .result-area {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            min-height: 120px;
+        }
+        
+        .computer-choice {
+            font-size: 18px;
+            color: #666;
+            min-height: 30px;
+        }
+        
+        .computer-choice .emoji {
+            font-size: 30px;
+            display: inline-block;
+            transition: all 0.5s;
+        }
+        
+        .result-text {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+            min-height: 40px;
+        }
+        
+        .thinking {
+            animation: pulse 0.5s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulse {
+            from { opacity: 0.4; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1.1); }
+        }
+        
+        .score {
+            font-size: 18px;
+            color: #333;
+            margin-top: 10px;
+        }
+        
+        .score span {
+            font-weight: bold;
+        }
+        
+        .score .player-score { color: #28a745; }
+        .score .computer-score { color: #dc3545; }
+        .score .ties-score { color: #ffc107; }
+        
+        .buttons-bottom {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .reset-btn, .back-btn {
+            padding: 10px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .reset-btn {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .reset-btn:hover {
+            background: #c82333;
+            transform: scale(1.05);
+        }
+        
+        .back-btn {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .back-btn:hover {
+            background: #5a6268;
+            transform: scale(1.05);
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .rules-hint {
+            font-size: 13px;
+            color: #888;
+            margin: 10px 0;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🦎 Камень-ножницы-бумага-ящерица-Спок</h1>
+        <div class="status" id="status">Готов к игре!</div>
+        
+        <div class="choices">
+            <button class="choice-btn" onclick="play('камень')">
+                🪨
+                <span class="btn-label">Камень</span>
+            </button>
+            <button class="choice-btn" onclick="play('ножницы')">
+                ✂️
+                <span class="btn-label">Ножницы</span>
+            </button>
+            <button class="choice-btn" onclick="play('бумага')">
+                📄
+                <span class="btn-label">Бумага</span>
+            </button>
+            <button class="choice-btn" onclick="play('ящерица')">
+                🦎
+                <span class="btn-label">Ящерица</span>
+            </button>
+            <button class="choice-btn" onclick="play('спок')">
+                🖖
+                <span class="btn-label">Спок</span>
+            </button>
+        </div>
+        
+        <div class="rules-hint">
+            🔹 Камень бьёт ножницы и ящерицу<br>
+            🔹 Ножницы режут бумагу и обезглавливают ящерицу<br>
+            🔹 Бумага накрывает камень и опровергает Спока<br>
+            🔹 Ящерица ест бумагу и отравляет Спока<br>
+            🔹 Спок разбивает камень и ломает ножницы
+        </div>
+        
+        <div class="result-area">
+            <div class="computer-choice" id="computerChoice">
+                🤖 <span class="emoji">❓</span> Компьютер думает...
+            </div>
+            <div class="result-text" id="result">Сделай выбор!</div>
+            <div class="score" id="score">
+                Счёт: <span class="player-score">Ты 0</span> | 
+                <span class="computer-score">Компьютер 0</span> | 
+                <span class="ties-score">Ничьих 0</span>
+            </div>
+        </div>
+        
+        <div class="buttons-bottom">
+            <button class="reset-btn" onclick="resetGame()">🔄 Сбросить счёт</button>
+            <button class="back-btn" onclick="window.location.href='index.html'">🏠 На главную</button>
+        </div>
+        
+        <div class="footer">
+            © 2024 Все права защищены.
+        </div>
+    </div>
+    
+    <script>
+        // ============================================================
+        // Автор: Дакиев Руслан
+        // Игра: Камень-ножницы-бумага-ящерица-Спок
+        // ============================================================
+        
+        let playerScore = 0;
+        let computerScore = 0;
+        let ties = 0;
+        let isPlaying = false;
+        
+        // Правила: что кого побеждает
+        const rules = {
+            'камень': ['ножницы', 'ящерица'],
+            'ножницы': ['бумага', 'ящерица'],
+            'бумага': ['камень', 'спок'],
+            'ящерица': ['бумага', 'спок'],
+            'спок': ['камень', 'ножницы']
+        };
+        
+        const emojis = {
+            'камень': '🪨',
+            'ножницы': '✂️',
+            'бумага': '📄',
+            'ящерица': '🦎',
+            'спок': '🖖'
+        };
+        
+        const computerChoiceEl = document.getElementById('computerChoice');
+        const resultEl = document.getElementById('result');
+        const scoreEl = document.getElementById('score');
+        const statusEl = document.getElementById('status');
+        const buttons = document.querySelectorAll('.choice-btn');
+        
+        function play(playerChoice) {
+            if (isPlaying) {
+                statusEl.textContent = '⏳ Подожди, игра обрабатывает ход...';
+                return;
+            }
+            
+            isPlaying = true;
+            buttons.forEach(btn => btn.disabled = true);
+            statusEl.textContent = '🤔 Компьютер выбирает...';
+            
+            const emojiSpan = document.querySelector('.computer-choice .emoji');
+            emojiSpan.textContent = '💭';
+            emojiSpan.className = 'emoji thinking';
+            resultEl.textContent = '...';
+            resultEl.style.color = '#666';
+            
+            setTimeout(() => {
+                const choices = ['камень', 'ножницы', 'бумага', 'ящерица', 'спок'];
+                const computerChoice = choices[Math.floor(Math.random() * 5)];
+                
+                emojiSpan.textContent = emojis[computerChoice];
+                emojiSpan.className = 'emoji';
+                document.querySelector('.computer-choice').innerHTML = 
+                    `🤖 <span class="emoji">${emojis[computerChoice]}</span> Компьютер выбрал: <strong>${computerChoice}</strong>`;
+                
+                let result = '';
+                let resultColor = '#333';
+                
+                if (playerChoice === computerChoice) {
+                    result = '🤝 Ничья!';
+                    ties++;
+                    resultColor = '#ffc107';
+                } else if (rules[playerChoice].includes(computerChoice)) {
+                    result = '🎉 Ты победил!';
+                    playerScore++;
+                    resultColor = '#28a745';
+                } else {
+                    result = '😢 Ты проиграл';
+                    computerScore++;
+                    resultColor = '#dc3545';
+                }
+                
+                resultEl.textContent = result;
+                resultEl.style.color = resultColor;
+                updateScore();
+                
+                statusEl.textContent = '✅ Готов к следующему ходу!';
+                
+                isPlaying = false;
+                buttons.forEach(btn => btn.disabled = false);
+                
+            }, 800);
+        }
+        
+        function updateScore() {
+            scoreEl.innerHTML = `
+                Счёт: <span class="player-score">Ты ${playerScore}</span> | 
+                <span class="computer-score">Компьютер ${computerScore}</span> | 
+                <span class="ties-score">Ничьих ${ties}</span>
+            `;
+        }
+        
+        function resetGame() {
+            if (isPlaying) return;
+            
+            playerScore = 0;
+            computerScore = 0;
+            ties = 0;
+            
+            document.querySelector('.computer-choice').innerHTML = 
+                '🤖 <span class="emoji">❓</span> Компьютер думает...';
+            resultEl.textContent = 'Сделай выбор!';
+            resultEl.style.color = '#333';
+            statusEl.textContent = '🔄 Счёт сброшен!';
+            updateScore();
+        }
+        
+        document.addEventListener('keydown', function(e) {
+            const key = e.key;
+            if (key === '1') play('камень');
+            else if (key === '2') play('ножницы');
+            else if (key === '3') play('бумага');
+            else if (key === '4') play('ящерица');
+            else if (key === '5') play('спок');
+        });
+    </script>
+</body>
+</html>
