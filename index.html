@@ -1,9 +1,20 @@
+<!--
+    ============================================================
+    Автор: Дакиев Руслан
+    Название: Игровая библиотека
+    Год: 2024
+    Все права защищены.
+    ============================================================
+-->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Моя игровая библиотека</title>
+    <title>Игровая библиотека — Дакиев Руслан</title>
+    <meta name="author" content="Дакиев Руслан">
+    <meta name="copyright" content="Дакиев Руслан, 2024">
+    <meta name="description" content="Игровая библиотека с играми: Угадай число, Камень-ножницы-бумага">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -34,6 +45,13 @@
             color: #666;
             font-size: 18px;
             margin-bottom: 30px;
+        }
+        
+        .author-badge {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 20px;
         }
         
         .games-grid {
@@ -84,39 +102,43 @@
         .footer {
             text-align: center;
             margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
             color: #666;
             font-size: 14px;
+        }
+        
+        .footer .copy {
+            font-weight: bold;
+            color: #333;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🎮 Моя игровая библиотека</h1>
+        <h1>🎮 Игровая библиотека</h1>
+        <div class="author-badge">Автор: Дакиев Руслан</div>
         <p class="subtitle">Добро пожаловать! Выбери игру и начни играть прямо в браузере</p>
         
         <div class="games-grid">
-            <!-- Карточка игры "Угадай число" -->
             <div class="game-card" onclick="window.location.href='guess.html'">
                 <span class="game-icon">🔢</span>
                 <div class="game-title">Угадай число</div>
                 <div class="game-desc">Угадай число от 1 до 10 за 3 попытки</div>
             </div>
             
-            <!-- Карточка игры "Камень-ножницы-бумага" -->
             <div class="game-card" onclick="window.location.href='rps.html'">
                 <span class="game-icon">✊</span>
                 <div class="game-title">Камень-ножницы-бумага</div>
                 <div class="game-desc">Сразись с компьютером в классическую игру</div>
             </div>
             
-            <!-- Карточка для будущей игры -->
             <div class="game-card coming-soon">
                 <span class="game-icon">❓</span>
                 <div class="game-title">Скоро!</div>
                 <div class="game-desc">Новая игра уже в разработке</div>
             </div>
             
-            <!-- Карточка для будущей игры -->
             <div class="game-card coming-soon">
                 <span class="game-icon">❓</span>
                 <div class="game-title">Скоро!</div>
@@ -125,7 +147,8 @@
         </div>
         
         <div class="footer">
-            Создано с ❤️ в ходе обучения программированию
+            <p><span class="copy">© 2024 Дакиев Руслан.</span> Все права защищены.</p>
+            <p style="font-size: 12px;">Копирование, распространение или использование без разрешения автора запрещено.</p>
         </div>
     </div>
 </body>
