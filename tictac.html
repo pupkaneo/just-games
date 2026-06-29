@@ -1,7 +1,7 @@
 <!--
     ============================================================
     Автор: Дакиев Руслан
-    Название: Игра "Крестики-нолики"
+    Название: Игра "Камень-ножницы-бумага"
     Год: 2024
     Все права защищены.
     ============================================================
@@ -11,13 +11,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Крестики-нолики — Дакиев Руслан</title>
+    <title>Камень-ножницы-бумага</title>
     <meta name="author" content="Дакиев Руслан">
     <meta name="copyright" content="Дакиев Руслан, 2024">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             margin: 0;
             padding: 40px;
             min-height: 100vh;
@@ -27,7 +27,8 @@
         }
         
         .container {
-            max-width: 500px;
+            max-width: 600px;
+            margin: 0 auto;
             background: white;
             padding: 40px;
             border-radius: 20px;
@@ -37,130 +38,138 @@
         
         h1 {
             color: #333;
-            margin-bottom: 5px;
-        }
-        
-        .author-info {
-            color: #888;
-            font-size: 12px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         
         .status {
-            font-size: 20px;
-            font-weight: bold;
-            margin: 15px 0;
-            min-height: 30px;
-            color: #333;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
         }
         
-        .board {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 20px auto;
-            max-width: 350px;
+        .choices {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
         }
         
-        .cell {
-            aspect-ratio: 1;
-            background: #f8f9fa;
+        .choice-btn {
+            font-size: 40px;
+            padding: 20px 30px;
             border: 3px solid #ddd;
             border-radius: 15px;
-            font-size: 60px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: white;
             cursor: pointer;
             transition: all 0.3s;
-            color: #333;
+            min-width: 100px;
+            position: relative;
         }
         
-        .cell:hover:not(.taken) {
-            background: #e9ecef;
-            transform: scale(1.03);
-            border-color: #4facfe;
+        .choice-btn:hover:not(:disabled) {
+            transform: scale(1.1);
+            border-color: #667eea;
+            background: #f0f0ff;
         }
         
-        .cell.taken {
+        .choice-btn:active:not(:disabled) {
+            transform: scale(0.9);
+        }
+        
+        .choice-btn:disabled {
+            opacity: 0.5;
             cursor: not-allowed;
+            transform: scale(0.95);
         }
         
-        .cell.x {
-            color: #4facfe;
+        .choice-btn .btn-label {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
         }
         
-        .cell.o {
-            color: #f5576c;
+        .result-area {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            min-height: 120px;
         }
         
-        .cell.win-cell {
-            background: #d4edda;
-            border-color: #28a745;
-            animation: winPulse 0.5s ease-in-out 3;
+        .computer-choice {
+            font-size: 18px;
+            color: #666;
+            min-height: 30px;
         }
         
-        @keyframes winPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+        .computer-choice .emoji {
+            font-size: 30px;
+            display: inline-block;
+            transition: all 0.5s;
+        }
+        
+        .result-text {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+            min-height: 40px;
+        }
+        
+        .thinking {
+            animation: pulse 0.5s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulse {
+            from { opacity: 0.4; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1.1); }
         }
         
         .score {
-            display: flex;
-            justify-content: space-around;
-            margin: 20px 0;
             font-size: 18px;
+            color: #333;
+            margin-top: 10px;
+        }
+        
+        .score span {
             font-weight: bold;
         }
         
-        .score .x-score {
-            color: #4facfe;
+        .score .player-score { color: #28a745; }
+        .score .computer-score { color: #dc3545; }
+        .score .ties-score { color: #ffc107; }
+        
+        .buttons-bottom {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
         }
         
-        .score .o-score {
-            color: #f5576c;
-        }
-        
-        .score .draw-score {
-            color: #6c757d;
-        }
-        
-        button {
-            padding: 12px 30px;
+        .reset-btn, .back-btn {
+            padding: 10px 25px;
             font-size: 16px;
             border: none;
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s;
-            margin: 5px;
-            font-weight: bold;
         }
         
-        .btn-reset {
-            background: #6c757d;
+        .reset-btn {
+            background: #dc3545;
             color: white;
         }
         
-        .btn-reset:hover {
-            background: #5a6268;
-            transform: scale(1.05);
-        }
-        
-        .btn-new {
-            background: #28a745;
-            color: white;
-        }
-        
-        .btn-new:hover {
-            background: #218838;
+        .reset-btn:hover {
+            background: #c82333;
             transform: scale(1.05);
         }
         
         .back-btn {
             background: #6c757d;
             color: white;
-            margin-top: 15px;
         }
         
         .back-btn:hover {
@@ -172,202 +181,165 @@
             margin-top: 30px;
             padding-top: 20px;
             border-top: 2px solid #eee;
-            color: #888;
+            color: #999;
             font-size: 12px;
-        }
-        
-        .winner-text {
-            font-size: 24px;
-            animation: winText 0.5s ease-in-out 3;
-        }
-        
-        @keyframes winText {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>❌ Крестики-нолики ⭕</h1>
-        <div class="author-info">Автор: Дакиев Руслан</div>
+        <h1>✊ Камень-ножницы-бумага ✋</h1>
+        <div class="status" id="status">Готов к игре!</div>
         
-        <div class="status" id="status">Ход: <span style="color:#4facfe;">X</span></div>
-        
-        <div class="board" id="board">
-            <div class="cell" data-index="0" onclick="makeMove(0)"></div>
-            <div class="cell" data-index="1" onclick="makeMove(1)"></div>
-            <div class="cell" data-index="2" onclick="makeMove(2)"></div>
-            <div class="cell" data-index="3" onclick="makeMove(3)"></div>
-            <div class="cell" data-index="4" onclick="makeMove(4)"></div>
-            <div class="cell" data-index="5" onclick="makeMove(5)"></div>
-            <div class="cell" data-index="6" onclick="makeMove(6)"></div>
-            <div class="cell" data-index="7" onclick="makeMove(7)"></div>
-            <div class="cell" data-index="8" onclick="makeMove(8)"></div>
+        <div class="choices">
+            <button class="choice-btn" data-choice="камень" onclick="play('камень')">
+                🪨
+                <span class="btn-label">Камень</span>
+            </button>
+            <button class="choice-btn" data-choice="ножницы" onclick="play('ножницы')">
+                ✂️
+                <span class="btn-label">Ножницы</span>
+            </button>
+            <button class="choice-btn" data-choice="бумага" onclick="play('бумага')">
+                📄
+                <span class="btn-label">Бумага</span>
+            </button>
         </div>
         
-        <div class="score">
-            <span class="x-score">❌ X: <span id="xScore">0</span></span>
-            <span class="draw-score">🤝 Ничьи: <span id="drawScore">0</span></span>
-            <span class="o-score">⭕ O: <span id="oScore">0</span></span>
+        <div class="result-area">
+            <div class="computer-choice" id="computerChoice">
+                🤖 <span class="emoji">❓</span> Компьютер думает...
+            </div>
+            <div class="result-text" id="result">Сделай выбор!</div>
+            <div class="score" id="score">
+                Счёт: <span class="player-score">Ты 0</span> | 
+                <span class="computer-score">Компьютер 0</span> | 
+                <span class="ties-score">Ничьих 0</span>
+            </div>
         </div>
         
-        <div>
-            <button class="btn-new" onclick="newGame()">🔄 Новая игра</button>
-            <button class="btn-reset" onclick="resetScore()">📊 Сбросить счёт</button>
+        <div class="buttons-bottom">
+            <button class="reset-btn" onclick="resetGame()">🔄 Сбросить счёт</button>
+            <button class="back-btn" onclick="window.location.href='index.html'">🏠 На главную</button>
         </div>
-        
-        <button class="back-btn" onclick="window.location.href='index.html'">🏠 На главную</button>
         
         <div class="footer">
-            © 2024 Дакиев Руслан. Все права защищены.
+            © 2024 Все права защищены.
         </div>
     </div>
     
     <script>
         // ============================================================
         // Автор: Дакиев Руслан
-        // Игра: Крестики-нолики
+        // Игра: Камень-ножницы-бумага
         // ============================================================
         
-        // ===== СОСТОЯНИЕ =====
-        let board = Array(9).fill(null);
-        let currentPlayer = 'X';
-        let gameActive = true;
-        let xScore = 0;
-        let oScore = 0;
-        let drawScore = 0;
+        let playerScore = 0;
+        let computerScore = 0;
+        let ties = 0;
+        let isPlaying = false;
         
-        // ===== ВЫИГРЫШНЫЕ КОМБИНАЦИИ =====
-        const winPatterns = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],  // строки
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],  // столбцы
-            [0, 4, 8], [2, 4, 6]               // диагонали
-        ];
+        const rules = {
+            'камень': 'ножницы',
+            'ножницы': 'бумага',
+            'бумага': 'камень'
+        };
         
-        // ===== ЭЛЕМЕНТЫ =====
-        const cells = document.querySelectorAll('.cell');
+        const emojisBig = {
+            'камень': '🪨',
+            'ножницы': '✂️',
+            'бумага': '📄'
+        };
+        
+        const computerChoiceEl = document.getElementById('computerChoice');
+        const resultEl = document.getElementById('result');
+        const scoreEl = document.getElementById('score');
         const statusEl = document.getElementById('status');
-        const xScoreEl = document.getElementById('xScore');
-        const oScoreEl = document.getElementById('oScore');
-        const drawScoreEl = document.getElementById('drawScore');
+        const buttons = document.querySelectorAll('.choice-btn');
         
-        // ===== ХОД ИГРОКА =====
-        function makeMove(index) {
-            if (!gameActive) {
-                statusEl.textContent = '⛔ Игра окончена! Нажми "Новая игра"';
+        function play(playerChoice) {
+            if (isPlaying) {
+                statusEl.textContent = '⏳ Подожди, игра обрабатывает ход...';
                 return;
             }
             
-            if (board[index] !== null) {
-                statusEl.textContent = '⛔ Эта клетка уже занята!';
-                return;
-            }
+            isPlaying = true;
+            buttons.forEach(btn => btn.disabled = true);
+            statusEl.textContent = '🤔 Компьютер выбирает...';
             
-            // Ставим знак
-            board[index] = currentPlayer;
-            cells[index].textContent = currentPlayer;
-            cells[index].classList.add('taken', currentPlayer.toLowerCase());
+            const emojiSpan = document.querySelector('.computer-choice .emoji');
+            emojiSpan.textContent = '💭';
+            emojiSpan.className = 'emoji thinking';
+            resultEl.textContent = '...';
+            resultEl.style.color = '#666';
             
-            // Проверяем победу
-            if (checkWin(currentPlayer)) {
-                highlightWin(currentPlayer);
-                statusEl.innerHTML = `🏆 Победил <span style="color:${currentPlayer === 'X' ? '#4facfe' : '#f5576c'};font-size:28px;">${currentPlayer}</span>! 🎉`;
-                statusEl.className = 'status winner-text';
-                gameActive = false;
-                updateScore(currentPlayer);
-                return;
-            }
-            
-            // Проверяем ничью
-            if (board.every(cell => cell !== null)) {
-                statusEl.textContent = '🤝 Ничья!';
-                statusEl.className = 'status';
-                gameActive = false;
-                drawScore++;
-                updateScoreDisplay();
-                return;
-            }
-            
-            // Меняем игрока
-            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-            statusEl.innerHTML = `Ход: <span style="color:${currentPlayer === 'X' ? '#4facfe' : '#f5576c'};">${currentPlayer}</span>`;
-            statusEl.className = 'status';
-        }
-        
-        // ===== ПРОВЕРКА ПОБЕДЫ =====
-        function checkWin(player) {
-            return winPatterns.some(pattern => {
-                return pattern.every(index => board[index] === player);
-            });
-        }
-        
-        // ===== ПОДСВЕТКА ВЫИГРЫШНЫХ КЛЕТОК =====
-        function highlightWin(player) {
-            winPatterns.forEach(pattern => {
-                if (pattern.every(index => board[index] === player)) {
-                    pattern.forEach(index => {
-                        cells[index].classList.add('win-cell');
-                    });
+            setTimeout(() => {
+                const choices = ['камень', 'ножницы', 'бумага'];
+                const computerChoice = choices[Math.floor(Math.random() * 3)];
+                
+                emojiSpan.textContent = emojisBig[computerChoice];
+                emojiSpan.className = 'emoji';
+                document.querySelector('.computer-choice').innerHTML = 
+                    `🤖 <span class="emoji">${emojisBig[computerChoice]}</span> Компьютер выбрал: <strong>${computerChoice}</strong>`;
+                
+                let result = '';
+                let resultColor = '#333';
+                
+                if (playerChoice === computerChoice) {
+                    result = '🤝 Ничья!';
+                    ties++;
+                    resultColor = '#ffc107';
+                } else if (rules[playerChoice] === computerChoice) {
+                    result = '🎉 Ты победил!';
+                    playerScore++;
+                    resultColor = '#28a745';
+                } else {
+                    result = '😢 Ты проиграл';
+                    computerScore++;
+                    resultColor = '#dc3545';
                 }
-            });
+                
+                resultEl.textContent = result;
+                resultEl.style.color = resultColor;
+                updateScore();
+                
+                statusEl.textContent = '✅ Готов к следующему ходу!';
+                
+                isPlaying = false;
+                buttons.forEach(btn => btn.disabled = false);
+                
+            }, 800);
         }
         
-        // ===== ОБНОВЛЕНИЕ СЧЁТА =====
-        function updateScore(player) {
-            if (player === 'X') xScore++;
-            else oScore++;
-            updateScoreDisplay();
+        function updateScore() {
+            scoreEl.innerHTML = `
+                Счёт: <span class="player-score">Ты ${playerScore}</span> | 
+                <span class="computer-score">Компьютер ${computerScore}</span> | 
+                <span class="ties-score">Ничьих ${ties}</span>
+            `;
         }
         
-        function updateScoreDisplay() {
-            xScoreEl.textContent = xScore;
-            oScoreEl.textContent = oScore;
-            drawScoreEl.textContent = drawScore;
-        }
-        
-        // ===== НОВАЯ ИГРА =====
-        function newGame() {
-            board = Array(9).fill(null);
-            currentPlayer = 'X';
-            gameActive = true;
+        function resetGame() {
+            if (isPlaying) return;
             
-            cells.forEach(cell => {
-                cell.textContent = '';
-                cell.className = 'cell';
-            });
+            playerScore = 0;
+            computerScore = 0;
+            ties = 0;
             
-            statusEl.innerHTML = `Ход: <span style="color:#4facfe;">X</span>`;
-            statusEl.className = 'status';
+            document.querySelector('.computer-choice').innerHTML = 
+                '🤖 <span class="emoji">❓</span> Компьютер думает...';
+            resultEl.textContent = 'Сделай выбор!';
+            resultEl.style.color = '#333';
+            statusEl.textContent = '🔄 Счёт сброшен!';
+            updateScore();
         }
         
-        // ===== СБРОС СЧЁТА =====
-        function resetScore() {
-            xScore = 0;
-            oScore = 0;
-            drawScore = 0;
-            updateScoreDisplay();
-            newGame();
-            statusEl.textContent = '📊 Счёт сброшен! Начинаем заново!';
-        }
-        
-        // ===== АВТОМАТИЧЕСКАЯ ИГРА КОМПЬЮТЕРА (O) =====
-        // Если вы хотите играть против компьютера, раскомментируйте этот блок
-        /*
-        function computerMove() {
-            if (!gameActive || currentPlayer !== 'O') return;
-            
-            // Простая стратегия: случайный ход
-            const emptyCells = board.map((cell, index) => cell === null ? index : null).filter(i => i !== null);
-            if (emptyCells.length === 0) return;
-            
-            const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-            setTimeout(() => makeMove(randomIndex), 500);
-        }
-        
-        // Добавьте в конец makeMove():
-        // if (gameActive && currentPlayer === 'O') computerMove();
-        */
+        document.addEventListener('keydown', function(e) {
+            const key = e.key;
+            if (key === '1') play('камень');
+            else if (key === '2') play('ножницы');
+            else if (key === '3') play('бумага');
+        });
     </script>
 </body>
 </html>
