@@ -278,26 +278,33 @@
         </div>
         <p class="subtitle">⚡ Твой игровой портал — играй прямо в браузере!</p>
         <div class="games-grid">
+            <!-- Угадай число -->
             <div class="game-card" onclick="window.location.href='guess.html'">
                 <span class="game-icon">🔢</span>
                 <div class="game-title">Угадай число</div>
                 <div class="game-desc">Угадай число от 1 до 1000 за 10 попыток</div>
                 <span class="card-badge">🧠 Логика</span>
             </div>
+            
+            <!-- Камень-ножницы-бумага -->
             <div class="game-card" onclick="window.location.href='rps.html'">
                 <span class="game-icon">✊</span>
                 <div class="game-title">Камень-ножницы-бумага</div>
                 <div class="game-desc">Классика или расширенная версия — выбирай!</div>
                 <span class="card-badge">🤖 С компьютером</span>
             </div>
+            
+            <!-- Крестики-нолики -->
             <div class="game-card" onclick="window.location.href='tictac.html'">
                 <span class="game-icon">❌</span>
                 <div class="game-title">Крестики-нолики</div>
                 <div class="game-desc">Сыграй с другом или против компьютера</div>
                 <span class="card-badge">🏆 Стратегия</span>
             </div>
+            
+            <!-- Кликер (иконка без эмодзи — используем CSS-золотой круг) -->
             <div class="game-card" onclick="window.location.href='clicker.html'">
-                <span class="game-icon">🪙</span>
+                <span class="game-icon" style="font-size:40px; display:inline-block; background:radial-gradient(circle at 35% 35%, #ffd700, #f0a500); width:60px; height:60px; border-radius:50%; line-height:60px; color:#fff; font-weight:bold; text-shadow:0 2px 4px rgba(0,0,0,0.3); margin:0 auto 10px;">💰</span>
                 <div class="game-title">Кликер</div>
                 <div class="game-desc">Нажимай на монетку и развивай экономику</div>
                 <span class="card-badge">💰 Экономика</span>
