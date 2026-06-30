@@ -32,6 +32,7 @@
             --btn-back-hover: #5a6268;
             --slider-bg: #ccc;
             --coin-shadow: rgba(255, 215, 0, 0.4);
+            --coin-gradient: radial-gradient(circle at 35% 35%, #ffd700, #f0a500);
         }
         
         [data-theme="dark"] {
@@ -50,6 +51,7 @@
             --btn-back-hover: #5a5a7e;
             --slider-bg: #4a4a6e;
             --coin-shadow: rgba(255, 215, 0, 0.2);
+            --coin-gradient: radial-gradient(circle at 35% 35%, #ff8c00, #cc7700);
         }
         
         body {
@@ -184,23 +186,26 @@
             width: 180px;
             height: 180px;
             border-radius: 50%;
-            border: none;
-            background: radial-gradient(circle at 35% 35%, #ffd700, #f0a500);
-            box-shadow: 0 8px 30px var(--coin-shadow);
-            font-size: 64px;
+            border: 4px solid #fff;
+            background: var(--coin-gradient);
+            box-shadow: 0 8px 30px var(--coin-shadow), inset 0 -4px 15px rgba(0,0,0,0.2);
+            font-size: 32px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
             cursor: pointer;
             transition: all 0.1s ease;
             margin: 20px auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #fff;
             user-select: none;
+            letter-spacing: 1px;
         }
         
         .click-btn:active {
             transform: scale(0.88);
-            box-shadow: 0 4px 15px var(--coin-shadow);
+            box-shadow: 0 4px 15px var(--coin-shadow), inset 0 -2px 10px rgba(0,0,0,0.3);
         }
         
         .click-btn:hover {
@@ -326,13 +331,15 @@
             transition: border-color 0.3s, color 0.3s;
         }
         
-        /* Анимация монетки при клике */
         .coin-fly {
             position: fixed;
             font-size: 28px;
             pointer-events: none;
             animation: flyUp 0.8s ease-out forwards;
             z-index: 999;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
         
         @keyframes flyUp {
@@ -369,7 +376,7 @@
             <div class="per-second">⏱ <span id="perSecond">0</span> монет/сек</div>
         </div>
         
-        <button class="click-btn" id="clickBtn">👆</button>
+        <button class="click-btn" id="clickBtn">КЛИК</button>
         
         <div class="shop">
             <div class="shop-item" id="clickUpgrade">
@@ -419,7 +426,6 @@
         // Игра: Кликер
         // ============================================================
         
-        // ===== ТЕМА =====
         var toggle = document.getElementById('themeToggle');
         var currentTheme = localStorage.getItem('theme');
         if (currentTheme === 'dark') {
@@ -436,7 +442,6 @@
             }
         });
         
-        // ===== СОСТОЯНИЕ =====
         var coins = 0;
         var clickPower = 1;
         var clickLevel = 0;
@@ -446,7 +451,6 @@
         var clickPrice = 25;
         var autoPrice = 100;
         
-        // ===== DOM =====
         var coinCountEl = document.getElementById('coinCount');
         var perSecondEl = document.getElementById('perSecond');
         var clickBtn = document.getElementById('clickBtn');
@@ -457,7 +461,6 @@
         var autoCountEl = document.getElementById('autoCount');
         var autoBuyBtn = document.getElementById('autoBuyBtn');
         
-        // ===== ЗВУК =====
         var audioCtx = null;
         
         function initAudio() {
@@ -479,9 +482,7 @@
                 gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
                 osc.start(audioCtx.currentTime);
                 osc.stop(audioCtx.currentTime + 0.08);
-            } catch (e) {
-                // тихо игнорируем ошибки звука
-            }
+            } catch (e) {}
         }
         
         function playCoinSound() {
@@ -497,12 +498,9 @@
                 gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
                 osc.start(audioCtx.currentTime);
                 osc.stop(audioCtx.currentTime + 0.1);
-            } catch (e) {
-                // тихо
-            }
+            } catch (e) {}
         }
         
-        // ===== СОХРАНЕНИЕ =====
         function saveGame() {
             var data = {
                 coins: coins,
@@ -534,7 +532,6 @@
             }
         }
         
-        // ===== UI =====
         function updateUI() {
             coinCountEl.textContent = Math.floor(coins);
             perSecondEl.textContent = autoCount * autoPower;
@@ -547,7 +544,6 @@
             autoBuyBtn.disabled = coins < autoPrice;
         }
         
-        // ===== АНИМАЦИЯ МОНЕТКИ =====
         function spawnCoinFly(x, y) {
             var el = document.createElement('div');
             el.className = 'coin-fly';
@@ -558,28 +554,24 @@
             var dist = 80 + Math.random() * 60;
             el.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
             el.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
-            el.style.color = '#ffd700';
             document.body.appendChild(el);
             setTimeout(function() {
                 el.remove();
             }, 900);
         }
         
-        // ===== КЛИК =====
         function handleClick(e) {
             coins += clickPower;
             playClickSound();
             updateUI();
             saveGame();
             
-            // Анимация монетки
             var rect = clickBtn.getBoundingClientRect();
             var cx = rect.left + rect.width / 2;
             var cy = rect.top + rect.height / 2;
             spawnCoinFly(cx - 20, cy - 20);
         }
         
-        // ===== ПОКУПКИ =====
         function buyClickUpgrade() {
             if (coins < clickPrice) return;
             coins -= clickPrice;
@@ -601,7 +593,6 @@
             saveGame();
         }
         
-        // ===== СБРОС =====
         function resetGame() {
             if (confirm('Точно сбросить весь прогресс? Это нельзя отменить.')) {
                 localStorage.removeItem('clickerSave');
@@ -617,7 +608,6 @@
             }
         }
         
-        // ===== ТИК АВТОКЛИКЕРА =====
         function tick() {
             if (autoCount > 0) {
                 var earned = autoCount * autoPower;
@@ -627,7 +617,6 @@
             }
         }
         
-        // ===== ИНИЦИАЛИЗАЦИЯ =====
         function init() {
             loadGame();
             updateUI();
@@ -637,8 +626,6 @@
             autoBuyBtn.addEventListener('click', buyAutoUpgrade);
             
             setInterval(tick, 1000);
-            
-            // Сохраняем каждые 10 секунд на всякий случай
             setInterval(saveGame, 10000);
         }
         
