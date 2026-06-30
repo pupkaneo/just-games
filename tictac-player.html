@@ -16,42 +16,166 @@
     <meta name="copyright" content="Дакиев Руслан, 2024">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
     <style>
+        :root {
+            --bg-body: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --bg-container: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --border-color: #eee;
+            --shadow: 0 10px 40px rgba(0,0,0,0.3);
+            --bg-card: #f8f9fa;
+            --border-card: #ddd;
+            --badge-bg: #f5576c;
+            --badge-text: white;
+            --btn-reset-bg: #6c757d;
+            --btn-reset-hover: #5a6268;
+            --btn-new-bg: #28a745;
+            --btn-new-hover: #218838;
+            --btn-back-bg: #6c757d;
+            --btn-back-hover: #5a6268;
+            --btn-mode-bg: #4facfe;
+            --btn-mode-hover: #3d8bda;
+            --slider-bg: #ccc;
+            --cell-bg: #f8f9fa;
+            --cell-border: #ddd;
+        }
+        
+        [data-theme="dark"] {
+            --bg-body: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            --bg-container: #1a1a2e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #aaaaaa;
+            --text-muted: #777777;
+            --border-color: #3a3a5e;
+            --shadow: 0 10px 40px rgba(0,0,0,0.7);
+            --bg-card: #2a2a4a;
+            --border-card: #3a3a5e;
+            --badge-bg: #f5576c;
+            --badge-text: white;
+            --btn-reset-bg: #4a4a6e;
+            --btn-reset-hover: #5a5a7e;
+            --btn-new-bg: #28a745;
+            --btn-new-hover: #218838;
+            --btn-back-bg: #4a4a6e;
+            --btn-back-hover: #5a5a7e;
+            --btn-mode-bg: #4facfe;
+            --btn-mode-hover: #3d8bda;
+            --slider-bg: #4a4a6e;
+            --cell-bg: #2a2a4a;
+            --cell-border: #3a3a5e;
+        }
+        
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: var(--bg-body);
             margin: 0;
             padding: 40px;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: background 0.5s ease;
         }
         
         .container {
             max-width: 500px;
-            background: white;
+            background: var(--bg-container);
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            box-shadow: var(--shadow);
             text-align: center;
+            transition: background 0.4s ease, box-shadow 0.4s ease;
         }
         
-        .logo {
-            font-size: 30px;
-            display: block;
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
             margin-bottom: 5px;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header-left .logo {
+            font-size: 30px;
         }
         
         h1 {
-            color: #333;
-            margin-bottom: 5px;
+            color: var(--text-primary);
             font-size: 24px;
+            margin: 0;
+            transition: color 0.3s;
+        }
+        
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .theme-switch-wrapper .icon {
+            font-size: 18px;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+        
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--slider-bg);
+            transition: 0.4s;
+            border-radius: 24px;
+        }
+        
+        .slider::before {
+            content: "";
+            position: absolute;
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+        
+        input:checked + .slider::before {
+            transform: translateX(24px);
         }
         
         .badge {
             display: inline-block;
-            background: #f5576c;
-            color: white;
+            background: var(--badge-bg);
+            color: var(--badge-text);
             padding: 4px 15px;
             border-radius: 20px;
             font-size: 12px;
@@ -63,7 +187,8 @@
             font-weight: bold;
             margin: 15px 0;
             min-height: 30px;
-            color: #333;
+            color: var(--text-primary);
+            transition: color 0.3s;
         }
         
         .board {
@@ -76,8 +201,8 @@
         
         .cell {
             aspect-ratio: 1;
-            background: #f8f9fa;
-            border: 3px solid #ddd;
+            background: var(--cell-bg);
+            border: 3px solid var(--cell-border);
             border-radius: 15px;
             font-size: 60px;
             font-weight: bold;
@@ -86,13 +211,13 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s;
-            color: #333;
+            color: var(--text-primary);
         }
         
         .cell:hover:not(.taken) {
-            background: #e9ecef;
+            background: var(--bg-card);
             transform: scale(1.03);
-            border-color: #f5576c;
+            border-color: #4facfe;
         }
         
         .cell.taken {
@@ -113,6 +238,11 @@
             animation: winPulse 0.5s ease-in-out 3;
         }
         
+        [data-theme="dark"] .cell.win-cell {
+            background: #1a3a2a;
+            border-color: #28a745;
+        }
+        
         @keyframes winPulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
@@ -124,6 +254,7 @@
             margin: 20px 0;
             font-size: 18px;
             font-weight: bold;
+            color: var(--text-primary);
         }
         
         .score .x-score {
@@ -150,52 +281,53 @@
         }
         
         .btn-reset {
-            background: #6c757d;
+            background: var(--btn-reset-bg);
             color: white;
         }
         
         .btn-reset:hover {
-            background: #5a6268;
+            background: var(--btn-reset-hover);
             transform: scale(1.05);
         }
         
         .btn-new {
-            background: #28a745;
+            background: var(--btn-new-bg);
             color: white;
         }
         
         .btn-new:hover {
-            background: #218838;
+            background: var(--btn-new-hover);
             transform: scale(1.05);
         }
         
         .back-btn {
-            background: #6c757d;
+            background: var(--btn-back-bg);
             color: white;
             margin-top: 15px;
         }
         
         .back-btn:hover {
-            background: #5a6268;
+            background: var(--btn-back-hover);
             transform: scale(1.05);
         }
         
         .mode-btn {
-            background: #4facfe;
+            background: var(--btn-mode-bg);
             color: white;
         }
         
         .mode-btn:hover {
-            background: #3d8bda;
+            background: var(--btn-mode-hover);
             transform: scale(1.05);
         }
         
         .footer {
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 2px solid #eee;
-            color: #999;
+            border-top: 2px solid var(--border-color);
+            color: var(--text-muted);
             font-size: 12px;
+            transition: border-color 0.3s, color 0.3s;
         }
         
         .winner-text {
@@ -211,8 +343,20 @@
 </head>
 <body>
     <div class="container">
-        <span class="logo">🎮</span>
-        <h1>GameZone</h1>
+        <div class="header">
+            <div class="header-left">
+                <span class="logo">🎮</span>
+                <h1>GameZone</h1>
+            </div>
+            <div class="theme-switch-wrapper">
+                <span class="icon">☀️</span>
+                <label class="theme-switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="icon">🌙</span>
+            </div>
+        </div>
         <div class="badge">👥 Игрок против игрока</div>
         
         <div class="status" id="status">Ход: <span style="color:#4facfe;">X</span></div>
@@ -242,131 +386,4 @@
         
         <div>
             <button class="mode-btn" onclick="window.location.href='tictac.html'">🎮 Сменить режим</button>
-            <button class="back-btn" onclick="window.location.href='index.html'">🏠 На главную</button>
-        </div>
-        
-        <div class="footer">
-            © 2024 Все права защищены. GameZone
-        </div>
-    </div>
-    
-    <script>
-        // ============================================================
-        // Автор: Дакиев Руслан
-        // Игра: Крестики-нолики (игрок против игрока)
-        // ============================================================
-        
-        var board = Array(9).fill(null);
-        var currentPlayer = 'X';
-        var gameActive = true;
-        var xScore = 0;
-        var oScore = 0;
-        var drawScore = 0;
-        
-        var winPatterns = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],
-            [0, 4, 8], [2, 4, 6]
-        ];
-        
-        var cells = document.querySelectorAll('.cell');
-        var statusEl = document.getElementById('status');
-        var xScoreEl = document.getElementById('xScore');
-        var oScoreEl = document.getElementById('oScore');
-        var drawScoreEl = document.getElementById('drawScore');
-        
-        function makeMove(index) {
-            if (!gameActive) {
-                statusEl.textContent = '⛔ Игра окончена! Нажми "Новая игра"';
-                return;
-            }
-            
-            if (board[index] !== null) {
-                statusEl.textContent = '⛔ Эта клетка уже занята!';
-                return;
-            }
-            
-            board[index] = currentPlayer;
-            cells[index].textContent = currentPlayer;
-            cells[index].classList.add('taken', currentPlayer.toLowerCase());
-            
-            if (checkWin(currentPlayer)) {
-                highlightWin(currentPlayer);
-                statusEl.innerHTML = '🏆 Победил <span style="color:' + (currentPlayer === 'X' ? '#4facfe' : '#f5576c') + ';font-size:28px;">' + currentPlayer + '</span>! 🎉';
-                statusEl.className = 'status winner-text';
-                gameActive = false;
-                updateScore(currentPlayer);
-                return;
-            }
-            
-            if (board.every(function(cell) { return cell !== null; })) {
-                statusEl.textContent = '🤝 Ничья!';
-                statusEl.className = 'status';
-                gameActive = false;
-                drawScore++;
-                updateScoreDisplay();
-                return;
-            }
-            
-            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-            statusEl.innerHTML = 'Ход: <span style="color:' + (currentPlayer === 'X' ? '#4facfe' : '#f5576c') + ';">' + currentPlayer + '</span>';
-            statusEl.className = 'status';
-        }
-        
-        function checkWin(player) {
-            return winPatterns.some(function(pattern) {
-                return pattern.every(function(index) {
-                    return board[index] === player;
-                });
-            });
-        }
-        
-        function highlightWin(player) {
-            winPatterns.forEach(function(pattern) {
-                if (pattern.every(function(index) {
-                    return board[index] === player;
-                })) {
-                    pattern.forEach(function(index) {
-                        cells[index].classList.add('win-cell');
-                    });
-                }
-            });
-        }
-        
-        function updateScore(player) {
-            if (player === 'X') xScore++;
-            else oScore++;
-            updateScoreDisplay();
-        }
-        
-        function updateScoreDisplay() {
-            xScoreEl.textContent = xScore;
-            oScoreEl.textContent = oScore;
-            drawScoreEl.textContent = drawScore;
-        }
-        
-        function newGame() {
-            board = Array(9).fill(null);
-            currentPlayer = 'X';
-            gameActive = true;
-            
-            cells.forEach(function(cell) {
-                cell.textContent = '';
-                cell.className = 'cell';
-            });
-            
-            statusEl.innerHTML = 'Ход: <span style="color:#4facfe;">X</span>';
-            statusEl.className = 'status';
-        }
-        
-        function resetScore() {
-            xScore = 0;
-            oScore = 0;
-            drawScore = 0;
-            updateScoreDisplay();
-            newGame();
-            statusEl.textContent = '📊 Счёт сброшен! Начинаем заново!';
-        }
-    </script>
-</body>
-</html>
+            <button class="back-btn
