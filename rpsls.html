@@ -16,43 +16,161 @@
     <meta name="copyright" content="Дакиев Руслан, 2024">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
     <style>
+        :root {
+            --bg-body: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --bg-container: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --border-color: #eee;
+            --shadow: 0 10px 40px rgba(0,0,0,0.3);
+            --bg-card: #f8f9fa;
+            --border-card: #ddd;
+            --badge-bg: #f5576c;
+            --badge-text: white;
+            --btn-reset-bg: #dc3545;
+            --btn-reset-hover: #c82333;
+            --btn-mode-bg: #f5576c;
+            --btn-mode-hover: #d9445a;
+            --btn-back-bg: #6c757d;
+            --btn-back-hover: #5a6268;
+            --slider-bg: #ccc;
+            --result-bg: #f8f9fa;
+        }
+        
+        [data-theme="dark"] {
+            --bg-body: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            --bg-container: #1a1a2e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #aaaaaa;
+            --text-muted: #777777;
+            --border-color: #3a3a5e;
+            --shadow: 0 10px 40px rgba(0,0,0,0.7);
+            --bg-card: #2a2a4a;
+            --border-card: #3a3a5e;
+            --badge-bg: #f5576c;
+            --badge-text: white;
+            --btn-reset-bg: #dc3545;
+            --btn-reset-hover: #c82333;
+            --btn-mode-bg: #f5576c;
+            --btn-mode-hover: #d9445a;
+            --btn-back-bg: #4a4a6e;
+            --btn-back-hover: #5a5a7e;
+            --slider-bg: #4a4a6e;
+            --result-bg: #2a2a4a;
+        }
+        
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: var(--bg-body);
             margin: 0;
             padding: 40px;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: background 0.5s ease;
         }
         
         .container {
             max-width: 700px;
             margin: 0 auto;
-            background: white;
+            background: var(--bg-container);
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            box-shadow: var(--shadow);
             text-align: center;
+            transition: background 0.4s ease, box-shadow 0.4s ease;
         }
         
-        .logo {
-            font-size: 30px;
-            display: block;
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
             margin-bottom: 5px;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header-left .logo {
+            font-size: 30px;
         }
         
         h1 {
-            color: #333;
+            color: var(--text-primary);
             font-size: 24px;
-            margin-bottom: 5px;
+            margin: 0;
+            transition: color 0.3s;
+        }
+        
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .theme-switch-wrapper .icon {
+            font-size: 18px;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+        
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--slider-bg);
+            transition: 0.4s;
+            border-radius: 24px;
+        }
+        
+        .slider::before {
+            content: "";
+            position: absolute;
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+        
+        input:checked + .slider::before {
+            transform: translateX(24px);
         }
         
         .badge {
             display: inline-block;
-            background: #f5576c;
-            color: white;
+            background: var(--badge-bg);
+            color: var(--badge-text);
             padding: 4px 15px;
             border-radius: 20px;
             font-size: 12px;
@@ -60,10 +178,11 @@
         }
         
         .status {
-            color: #666;
+            color: var(--text-secondary);
             font-size: 14px;
             margin-bottom: 20px;
             min-height: 24px;
+            transition: color 0.3s;
         }
         
         .choices {
@@ -77,327 +196,19 @@
         .choice-btn {
             font-size: 28px;
             padding: 15px 18px;
-            border: 3px solid #ddd;
+            border: 3px solid var(--border-card);
             border-radius: 15px;
-            background: white;
+            background: var(--bg-card);
             cursor: pointer;
             transition: all 0.3s;
             min-width: 70px;
+            color: var(--text-primary);
         }
         
         .choice-btn:hover:not(:disabled) {
             transform: scale(1.1);
             border-color: #f5576c;
-            background: #fce4ec;
+            background: var(--bg-container);
         }
         
-        .choice-btn:active:not(:disabled) {
-            transform: scale(0.9);
-        }
-        
-        .choice-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: scale(0.95);
-        }
-        
-        .choice-btn .btn-label {
-            display: block;
-            font-size: 10px;
-            color: #666;
-            margin-top: 3px;
-        }
-        
-        .result-area {
-            margin: 20px 0;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 15px;
-            min-height: 120px;
-        }
-        
-        .computer-choice {
-            font-size: 18px;
-            color: #666;
-            min-height: 30px;
-        }
-        
-        .computer-choice .emoji {
-            font-size: 30px;
-            display: inline-block;
-            transition: all 0.5s;
-        }
-        
-        .result-text {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 10px 0;
-            min-height: 40px;
-        }
-        
-        .thinking {
-            animation: pulse 0.5s ease-in-out infinite alternate;
-        }
-        
-        @keyframes pulse {
-            from { opacity: 0.4; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1.1); }
-        }
-        
-        .score {
-            font-size: 18px;
-            color: #333;
-            margin-top: 10px;
-        }
-        
-        .score span {
-            font-weight: bold;
-        }
-        
-        .score .player-score { color: #28a745; }
-        .score .computer-score { color: #dc3545; }
-        .score .ties-score { color: #ffc107; }
-        
-        .buttons-bottom {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-        
-        .reset-btn, .back-btn, .mode-btn {
-            padding: 10px 25px;
-            font-size: 16px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .reset-btn {
-            background: #dc3545;
-            color: white;
-        }
-        
-        .reset-btn:hover {
-            background: #c82333;
-            transform: scale(1.05);
-        }
-        
-        .mode-btn {
-            background: #f5576c;
-            color: white;
-        }
-        
-        .mode-btn:hover {
-            background: #d9445a;
-            transform: scale(1.05);
-        }
-        
-        .back-btn {
-            background: #6c757d;
-            color: white;
-        }
-        
-        .back-btn:hover {
-            background: #5a6268;
-            transform: scale(1.05);
-        }
-        
-        .rules-hint {
-            font-size: 12px;
-            color: #888;
-            margin: 10px 0;
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 10px;
-            line-height: 1.6;
-        }
-        
-        .footer {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid #eee;
-            color: #999;
-            font-size: 12px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <span class="logo">🎮</span>
-        <h1>GameZone</h1>
-        <div class="badge">🦎 Расширенная версия</div>
-        <div class="status" id="status">Готов к игре!</div>
-        
-        <div class="choices">
-            <button class="choice-btn" onclick="play('камень')">
-                🪨
-                <span class="btn-label">Камень</span>
-            </button>
-            <button class="choice-btn" onclick="play('ножницы')">
-                ✂️
-                <span class="btn-label">Ножницы</span>
-            </button>
-            <button class="choice-btn" onclick="play('бумага')">
-                📄
-                <span class="btn-label">Бумага</span>
-            </button>
-            <button class="choice-btn" onclick="play('ящерица')">
-                🦎
-                <span class="btn-label">Ящерица</span>
-            </button>
-            <button class="choice-btn" onclick="play('спок')">
-                🖖
-                <span class="btn-label">Спок</span>
-            </button>
-        </div>
-        
-        <div class="rules-hint">
-            🔹 Камень бьёт ножницы и ящерицу &nbsp;|&nbsp;
-            🔹 Ножницы режут бумагу и ящерицу &nbsp;|&nbsp;
-            🔹 Бумага накрывает камень и Спока &nbsp;|&nbsp;
-            🔹 Ящерица ест бумагу и Спока &nbsp;|&nbsp;
-            🔹 Спок разбивает камень и ножницы
-        </div>
-        
-        <div class="result-area">
-            <div class="computer-choice" id="computerChoice">
-                🤖 <span class="emoji">❓</span> Компьютер думает...
-            </div>
-            <div class="result-text" id="result">Сделай выбор!</div>
-            <div class="score" id="score">
-                Счёт: <span class="player-score">Ты 0</span> | 
-                <span class="computer-score">Компьютер 0</span> | 
-                <span class="ties-score">Ничьих 0</span>
-            </div>
-        </div>
-        
-        <div class="buttons-bottom">
-            <button class="reset-btn" onclick="resetGame()">🔄 Сбросить счёт</button>
-            <button class="mode-btn" onclick="window.location.href='rps.html'">🎮 Сменить режим</button>
-            <button class="back-btn" onclick="window.location.href='index.html'">🏠 На главную</button>
-        </div>
-        
-        <div class="footer">
-            © 2024 Все права защищены. GameZone
-        </div>
-    </div>
-    
-    <script>
-        // ============================================================
-        // Автор: Дакиев Руслан
-        // Игра: Камень-ножницы-бумага-ящерица-Спок
-        // ============================================================
-        
-        var playerScore = 0;
-        var computerScore = 0;
-        var ties = 0;
-        var isPlaying = false;
-        
-        var rules = {
-            'камень': ['ножницы', 'ящерица'],
-            'ножницы': ['бумага', 'ящерица'],
-            'бумага': ['камень', 'спок'],
-            'ящерица': ['бумага', 'спок'],
-            'спок': ['камень', 'ножницы']
-        };
-        
-        var emojis = {
-            'камень': '🪨',
-            'ножницы': '✂️',
-            'бумага': '📄',
-            'ящерица': '🦎',
-            'спок': '🖖'
-        };
-        
-        var computerChoiceEl = document.getElementById('computerChoice');
-        var resultEl = document.getElementById('result');
-        var scoreEl = document.getElementById('score');
-        var statusEl = document.getElementById('status');
-        var buttons = document.querySelectorAll('.choice-btn');
-        
-        function play(playerChoice) {
-            if (isPlaying) {
-                statusEl.textContent = '⏳ Подожди, игра обрабатывает ход...';
-                return;
-            }
-            
-            isPlaying = true;
-            buttons.forEach(function(btn) { btn.disabled = true; });
-            statusEl.textContent = '🤔 Компьютер выбирает...';
-            
-            var emojiSpan = document.querySelector('.computer-choice .emoji');
-            emojiSpan.textContent = '💭';
-            emojiSpan.className = 'emoji thinking';
-            resultEl.textContent = '...';
-            resultEl.style.color = '#666';
-            
-            setTimeout(function() {
-                var choices = ['камень', 'ножницы', 'бумага', 'ящерица', 'спок'];
-                var computerChoice = choices[Math.floor(Math.random() * 5)];
-                
-                emojiSpan.textContent = emojis[computerChoice];
-                emojiSpan.className = 'emoji';
-                document.querySelector('.computer-choice').innerHTML = 
-                    '🤖 <span class="emoji">' + emojis[computerChoice] + '</span> Компьютер выбрал: <strong>' + computerChoice + '</strong>';
-                
-                var result = '';
-                var resultColor = '#333';
-                
-                if (playerChoice === computerChoice) {
-                    result = '🤝 Ничья!';
-                    ties++;
-                    resultColor = '#ffc107';
-                } else if (rules[playerChoice].includes(computerChoice)) {
-                    result = '🎉 Ты победил!';
-                    playerScore++;
-                    resultColor = '#28a745';
-                } else {
-                    result = '😢 Ты проиграл';
-                    computerScore++;
-                    resultColor = '#dc3545';
-                }
-                
-                resultEl.textContent = result;
-                resultEl.style.color = resultColor;
-                updateScore();
-                
-                statusEl.textContent = '✅ Готов к следующему ходу!';
-                
-                isPlaying = false;
-                buttons.forEach(function(btn) { btn.disabled = false; });
-                
-            }, 800);
-        }
-        
-        function updateScore() {
-            scoreEl.innerHTML = 'Счёт: <span class="player-score">Ты ' + playerScore + '</span> | <span class="computer-score">Компьютер ' + computerScore + '</span> | <span class="ties-score">Ничьих ' + ties + '</span>';
-        }
-        
-        function resetGame() {
-            if (isPlaying) return;
-            
-            playerScore = 0;
-            computerScore = 0;
-            ties = 0;
-            
-            document.querySelector('.computer-choice').innerHTML = '🤖 <span class="emoji">❓</span> Компьютер думает...';
-            resultEl.textContent = 'Сделай выбор!';
-            resultEl.style.color = '#333';
-            statusEl.textContent = '🔄 Счёт сброшен!';
-            updateScore();
-        }
-        
-        document.addEventListener('keydown', function(e) {
-            var key = e.key;
-            if (key === '1') play('камень');
-            else if (key === '2') play('ножницы');
-            else if (key === '3') play('бумага');
-            else if (key === '4') play('ящерица');
-            else if (key === '5') play('спок');
-        });
-    </script>
-</body>
-</html>
+       
