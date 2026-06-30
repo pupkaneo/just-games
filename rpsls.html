@@ -211,4 +211,340 @@
             background: var(--bg-container);
         }
         
-       
+        .choice-btn:active:not(:disabled) {
+            transform: scale(0.9);
+        }
+        
+        .choice-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: scale(0.95);
+        }
+        
+        .choice-btn .btn-label {
+            display: block;
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-top: 3px;
+        }
+        
+        .result-area {
+            margin: 20px 0;
+            padding: 20px;
+            background: var(--result-bg);
+            border-radius: 15px;
+            min-height: 120px;
+            transition: background 0.3s;
+        }
+        
+        .computer-choice {
+            font-size: 18px;
+            color: var(--text-secondary);
+            min-height: 30px;
+        }
+        
+        .computer-choice .emoji {
+            font-size: 30px;
+            display: inline-block;
+            transition: all 0.5s;
+        }
+        
+        .result-text {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+            min-height: 40px;
+            color: var(--text-primary);
+        }
+        
+        .thinking {
+            animation: pulse 0.5s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulse {
+            from { opacity: 0.4; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1.1); }
+        }
+        
+        .score {
+            font-size: 18px;
+            color: var(--text-primary);
+            margin-top: 10px;
+        }
+        
+        .score span {
+            font-weight: bold;
+        }
+        
+        .score .player-score { color: #28a745; }
+        .score .computer-score { color: #dc3545; }
+        .score .ties-score { color: #ffc107; }
+        
+        .buttons-bottom {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .reset-btn, .back-btn, .mode-btn {
+            padding: 10px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .reset-btn {
+            background: var(--btn-reset-bg);
+            color: white;
+        }
+        
+        .reset-btn:hover {
+            background: var(--btn-reset-hover);
+            transform: scale(1.05);
+        }
+        
+        .mode-btn {
+            background: var(--btn-mode-bg);
+            color: white;
+        }
+        
+        .mode-btn:hover {
+            background: var(--btn-mode-hover);
+            transform: scale(1.05);
+        }
+        
+        .back-btn {
+            background: var(--btn-back-bg);
+            color: white;
+        }
+        
+        .back-btn:hover {
+            background: var(--btn-back-hover);
+            transform: scale(1.05);
+        }
+        
+        .rules-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin: 10px 0;
+            background: var(--result-bg);
+            padding: 10px;
+            border-radius: 10px;
+            line-height: 1.6;
+            transition: color 0.3s, background 0.3s;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 12px;
+            transition: border-color 0.3s, color 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <span class="logo">🎮</span>
+                <h1>GameZone</h1>
+            </div>
+            <div class="theme-switch-wrapper">
+                <span class="icon">☀️</span>
+                <label class="theme-switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="icon">🌙</span>
+            </div>
+        </div>
+        <div class="badge">🦎 Расширенная версия</div>
+        <div class="status" id="status">Готов к игре!</div>
+        
+        <div class="choices">
+            <button class="choice-btn" onclick="play('камень')">
+                🪨
+                <span class="btn-label">Камень</span>
+            </button>
+            <button class="choice-btn" onclick="play('ножницы')">
+                ✂️
+                <span class="btn-label">Ножницы</span>
+            </button>
+            <button class="choice-btn" onclick="play('бумага')">
+                📄
+                <span class="btn-label">Бумага</span>
+            </button>
+            <button class="choice-btn" onclick="play('ящерица')">
+                🦎
+                <span class="btn-label">Ящерица</span>
+            </button>
+            <button class="choice-btn" onclick="play('спок')">
+                🖖
+                <span class="btn-label">Спок</span>
+            </button>
+        </div>
+        
+        <div class="rules-hint">
+            🔹 Камень бьёт ножницы и ящерицу &nbsp;|&nbsp;
+            🔹 Ножницы режут бумагу и ящерицу &nbsp;|&nbsp;
+            🔹 Бумага накрывает камень и Спока &nbsp;|&nbsp;
+            🔹 Ящерица ест бумагу и Спока &nbsp;|&nbsp;
+            🔹 Спок разбивает камень и ножницы
+        </div>
+        
+        <div class="result-area">
+            <div class="computer-choice" id="computerChoice">
+                🤖 <span class="emoji">❓</span> Компьютер думает...
+            </div>
+            <div class="result-text" id="result">Сделай выбор!</div>
+            <div class="score" id="score">
+                Счёт: <span class="player-score">Ты 0</span> | 
+                <span class="computer-score">Компьютер 0</span> | 
+                <span class="ties-score">Ничьих 0</span>
+            </div>
+        </div>
+        
+        <div class="buttons-bottom">
+            <button class="reset-btn" onclick="resetGame()">🔄 Сбросить счёт</button>
+            <button class="mode-btn" onclick="window.location.href='rps.html'">🎮 Сменить режим</button>
+            <button class="back-btn" onclick="window.location.href='index.html'">🏠 На главную</button>
+        </div>
+        
+        <div class="footer">
+            © 2024 Все права защищены. GameZone
+        </div>
+    </div>
+    
+    <script>
+        var toggle = document.getElementById('themeToggle');
+        var currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            toggle.checked = true;
+        }
+        toggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        var playerScore = 0;
+        var computerScore = 0;
+        var ties = 0;
+        var isPlaying = false;
+        
+        var rules = {
+            'камень': ['ножницы', 'ящерица'],
+            'ножницы': ['бумага', 'ящерица'],
+            'бумага': ['камень', 'спок'],
+            'ящерица': ['бумага', 'спок'],
+            'спок': ['камень', 'ножницы']
+        };
+        
+        var emojis = {
+            'камень': '🪨',
+            'ножницы': '✂️',
+            'бумага': '📄',
+            'ящерица': '🦎',
+            'спок': '🖖'
+        };
+        
+        var computerChoiceEl = document.getElementById('computerChoice');
+        var resultEl = document.getElementById('result');
+        var scoreEl = document.getElementById('score');
+        var statusEl = document.getElementById('status');
+        var buttons = document.querySelectorAll('.choice-btn');
+        
+        function play(playerChoice) {
+            if (isPlaying) {
+                statusEl.textContent = '⏳ Подожди, игра обрабатывает ход...';
+                return;
+            }
+            
+            isPlaying = true;
+            buttons.forEach(function(btn) { btn.disabled = true; });
+            statusEl.textContent = '🤔 Компьютер выбирает...';
+            
+            var emojiSpan = document.querySelector('.computer-choice .emoji');
+            emojiSpan.textContent = '💭';
+            emojiSpan.className = 'emoji thinking';
+            resultEl.textContent = '...';
+            resultEl.style.color = '#666';
+            
+            setTimeout(function() {
+                var choices = ['камень', 'ножницы', 'бумага', 'ящерица', 'спок'];
+                var computerChoice = choices[Math.floor(Math.random() * 5)];
+                
+                emojiSpan.textContent = emojis[computerChoice];
+                emojiSpan.className = 'emoji';
+                document.querySelector('.computer-choice').innerHTML = 
+                    '🤖 <span class="emoji">' + emojis[computerChoice] + '</span> Компьютер выбрал: <strong>' + computerChoice + '</strong>';
+                
+                var result = '';
+                var resultColor = '#333';
+                
+                if (playerChoice === computerChoice) {
+                    result = '🤝 Ничья!';
+                    ties++;
+                    resultColor = '#ffc107';
+                } else if (rules[playerChoice].includes(computerChoice)) {
+                    result = '🎉 Ты победил!';
+                    playerScore++;
+                    resultColor = '#28a745';
+                } else {
+                    result = '😢 Ты проиграл';
+                    computerScore++;
+                    resultColor = '#dc3545';
+                }
+                
+                resultEl.textContent = result;
+                resultEl.style.color = resultColor;
+                updateScore();
+                
+                statusEl.textContent = '✅ Готов к следующему ходу!';
+                
+                isPlaying = false;
+                buttons.forEach(function(btn) { btn.disabled = false; });
+                
+            }, 800);
+        }
+        
+        function updateScore() {
+            scoreEl.innerHTML = 'Счёт: <span class="player-score">Ты ' + playerScore + '</span> | <span class="computer-score">Компьютер ' + computerScore + '</span> | <span class="ties-score">Ничьих ' + ties + '</span>';
+        }
+        
+        function resetGame() {
+            if (isPlaying) return;
+            
+            playerScore = 0;
+            computerScore = 0;
+            ties = 0;
+            
+            document.querySelector('.computer-choice').innerHTML = '🤖 <span class="emoji">❓</span> Компьютер думает...';
+            resultEl.textContent = 'Сделай выбор!';
+            resultEl.style.color = '#333';
+            statusEl.textContent = '🔄 Счёт сброшен!';
+            updateScore();
+        }
+        
+        document.addEventListener('keydown', function(e) {
+            var key = e.key;
+            if (key === '1') play('камень');
+            else if (key === '2') play('ножницы');
+            else if (key === '3') play('бумага');
+            else if (key === '4') play('ящерица');
+            else if (key === '5') play('спок');
+        });
+    </script>
+</body>
+</html>
