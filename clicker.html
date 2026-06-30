@@ -1,0 +1,648 @@
+<!--
+    ============================================================
+    Автор: Дакиев Руслан
+    Название: GameZone — Кликер
+    Год: 2024
+    Все права защищены.
+    ============================================================
+-->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameZone — Кликер</title>
+    <meta name="author" content="Дакиев Руслан">
+    <meta name="copyright" content="Дакиев Руслан, 2024">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+    <style>
+        :root {
+            --bg-body: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-container: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --border-color: #eee;
+            --shadow: 0 10px 40px rgba(0,0,0,0.3);
+            --bg-card: #f8f9fa;
+            --border-card: transparent;
+            --btn-bg: #667eea;
+            --btn-hover: #5a6fd6;
+            --btn-back-bg: #6c757d;
+            --btn-back-hover: #5a6268;
+            --slider-bg: #ccc;
+            --coin-shadow: rgba(255, 215, 0, 0.4);
+        }
+        
+        [data-theme="dark"] {
+            --bg-body: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            --bg-container: #1a1a2e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #aaaaaa;
+            --text-muted: #777777;
+            --border-color: #3a3a5e;
+            --shadow: 0 10px 40px rgba(0,0,0,0.7);
+            --bg-card: #2a2a4a;
+            --border-card: #3a3a5e;
+            --btn-bg: #4facfe;
+            --btn-hover: #3d8bda;
+            --btn-back-bg: #4a4a6e;
+            --btn-back-hover: #5a5a7e;
+            --slider-bg: #4a4a6e;
+            --coin-shadow: rgba(255, 215, 0, 0.2);
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--bg-body);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.5s ease;
+        }
+        
+        .container {
+            max-width: 600px;
+            background: var(--bg-container);
+            padding: 35px;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: background 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header-left .logo {
+            font-size: 32px;
+        }
+        
+        h1 {
+            color: var(--text-primary);
+            font-size: 26px;
+            margin: 0;
+            transition: color 0.3s;
+        }
+        
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .theme-switch-wrapper .icon {
+            font-size: 18px;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+        
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--slider-bg);
+            transition: 0.4s;
+            border-radius: 24px;
+        }
+        
+        .slider::before {
+            content: "";
+            position: absolute;
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+        
+        input:checked + .slider::before {
+            transform: translateX(24px);
+        }
+        
+        .score-area {
+            margin: 20px 0;
+        }
+        
+        .coins {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--text-primary);
+            transition: color 0.3s;
+        }
+        
+        .coins span {
+            color: #ffd700;
+        }
+        
+        .per-second {
+            color: var(--text-secondary);
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+        
+        .click-btn {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: none;
+            background: radial-gradient(circle at 35% 35%, #ffd700, #f0a500);
+            box-shadow: 0 8px 30px var(--coin-shadow);
+            font-size: 64px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            user-select: none;
+        }
+        
+        .click-btn:active {
+            transform: scale(0.88);
+            box-shadow: 0 4px 15px var(--coin-shadow);
+        }
+        
+        .click-btn:hover {
+            transform: scale(1.02);
+        }
+        
+        .shop {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 25px 0;
+        }
+        
+        .shop-item {
+            background: var(--bg-card);
+            padding: 15px 20px;
+            border-radius: 16px;
+            border: 2px solid var(--border-card);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s, border-color 0.3s;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .shop-item .info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-align: left;
+        }
+        
+        .shop-item .info .icon {
+            font-size: 28px;
+        }
+        
+        .shop-item .info .title {
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+        
+        .shop-item .info .desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .shop-item .buy-btn {
+            padding: 10px 22px;
+            border: none;
+            border-radius: 12px;
+            background: var(--btn-bg);
+            color: white;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        
+        .shop-item .buy-btn:hover:not(:disabled) {
+            background: var(--btn-hover);
+            transform: scale(1.03);
+        }
+        
+        .shop-item .buy-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .shop-item .price {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-right: 5px;
+        }
+        
+        .shop-item .count {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+        
+        .footer-btns {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .footer-btns button {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--btn-back-bg);
+            color: white;
+        }
+        
+        .footer-btns button:hover {
+            background: var(--btn-back-hover);
+            transform: scale(1.03);
+        }
+        
+        .footer-btns .reset-btn {
+            background: #dc3545;
+        }
+        
+        .footer-btns .reset-btn:hover {
+            background: #c82333;
+        }
+        
+        .footer {
+            margin-top: 25px;
+            padding-top: 18px;
+            border-top: 2px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 12px;
+            transition: border-color 0.3s, color 0.3s;
+        }
+        
+        /* Анимация монетки при клике */
+        .coin-fly {
+            position: fixed;
+            font-size: 28px;
+            pointer-events: none;
+            animation: flyUp 0.8s ease-out forwards;
+            z-index: 999;
+        }
+        
+        @keyframes flyUp {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0.5);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <span class="logo">🪙</span>
+                <h1>GameZone</h1>
+            </div>
+            <div class="theme-switch-wrapper">
+                <span class="icon">☀️</span>
+                <label class="theme-switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="icon">🌙</span>
+            </div>
+        </div>
+        
+        <div class="score-area">
+            <div class="coins">🪙 <span id="coinCount">0</span></div>
+            <div class="per-second">⏱ <span id="perSecond">0</span> монет/сек</div>
+        </div>
+        
+        <button class="click-btn" id="clickBtn">👆</button>
+        
+        <div class="shop">
+            <div class="shop-item" id="clickUpgrade">
+                <div class="info">
+                    <span class="icon">💪</span>
+                    <div>
+                        <div class="title">Улучшение клика</div>
+                        <div class="desc">+1 монета за клик</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="price" id="clickPrice">25</span> 🪙
+                    <button class="buy-btn" id="clickBuyBtn">Купить</button>
+                    <div class="count">Уровень: <span id="clickLevel">0</span></div>
+                </div>
+            </div>
+            
+            <div class="shop-item" id="autoUpgrade">
+                <div class="info">
+                    <span class="icon">🤖</span>
+                    <div>
+                        <div class="title">Автокликер</div>
+                        <div class="desc">+1 монета/сек</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="price" id="autoPrice">100</span> 🪙
+                    <button class="buy-btn" id="autoBuyBtn">Купить</button>
+                    <div class="count">Кол-во: <span id="autoCount">0</span></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-btns">
+            <button onclick="window.location.href='index.html'">🏠 На главную</button>
+            <button class="reset-btn" onclick="resetGame()">🔄 Сбросить прогресс</button>
+        </div>
+        
+        <div class="footer">
+            © 2024 Все права защищены. GameZone
+        </div>
+    </div>
+    
+    <script>
+        // ============================================================
+        // Автор: Дакиев Руслан
+        // Игра: Кликер
+        // ============================================================
+        
+        // ===== ТЕМА =====
+        var toggle = document.getElementById('themeToggle');
+        var currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            toggle.checked = true;
+        }
+        toggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // ===== СОСТОЯНИЕ =====
+        var coins = 0;
+        var clickPower = 1;
+        var clickLevel = 0;
+        var autoCount = 0;
+        var autoPower = 1;
+        
+        var clickPrice = 25;
+        var autoPrice = 100;
+        
+        // ===== DOM =====
+        var coinCountEl = document.getElementById('coinCount');
+        var perSecondEl = document.getElementById('perSecond');
+        var clickBtn = document.getElementById('clickBtn');
+        var clickPriceEl = document.getElementById('clickPrice');
+        var clickLevelEl = document.getElementById('clickLevel');
+        var clickBuyBtn = document.getElementById('clickBuyBtn');
+        var autoPriceEl = document.getElementById('autoPrice');
+        var autoCountEl = document.getElementById('autoCount');
+        var autoBuyBtn = document.getElementById('autoBuyBtn');
+        
+        // ===== ЗВУК =====
+        var audioCtx = null;
+        
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+        
+        function playClickSound() {
+            try {
+                initAudio();
+                var osc = audioCtx.createOscillator();
+                var gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.frequency.value = 800 + Math.random() * 200;
+                osc.type = 'sine';
+                gain.gain.value = 0.08;
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+                osc.start(audioCtx.currentTime);
+                osc.stop(audioCtx.currentTime + 0.08);
+            } catch (e) {
+                // тихо игнорируем ошибки звука
+            }
+        }
+        
+        function playCoinSound() {
+            try {
+                initAudio();
+                var osc = audioCtx.createOscillator();
+                var gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.frequency.value = 1200 + Math.random() * 300;
+                osc.type = 'sine';
+                gain.gain.value = 0.06;
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+                osc.start(audioCtx.currentTime);
+                osc.stop(audioCtx.currentTime + 0.1);
+            } catch (e) {
+                // тихо
+            }
+        }
+        
+        // ===== СОХРАНЕНИЕ =====
+        function saveGame() {
+            var data = {
+                coins: coins,
+                clickPower: clickPower,
+                clickLevel: clickLevel,
+                autoCount: autoCount,
+                autoPower: autoPower,
+                clickPrice: clickPrice,
+                autoPrice: autoPrice
+            };
+            localStorage.setItem('clickerSave', JSON.stringify(data));
+        }
+        
+        function loadGame() {
+            var raw = localStorage.getItem('clickerSave');
+            if (!raw) return false;
+            try {
+                var data = JSON.parse(raw);
+                coins = data.coins || 0;
+                clickPower = data.clickPower || 1;
+                clickLevel = data.clickLevel || 0;
+                autoCount = data.autoCount || 0;
+                autoPower = data.autoPower || 1;
+                clickPrice = data.clickPrice || 25;
+                autoPrice = data.autoPrice || 100;
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+        
+        // ===== UI =====
+        function updateUI() {
+            coinCountEl.textContent = Math.floor(coins);
+            perSecondEl.textContent = autoCount * autoPower;
+            clickLevelEl.textContent = clickLevel;
+            clickPriceEl.textContent = clickPrice;
+            autoCountEl.textContent = autoCount;
+            autoPriceEl.textContent = autoPrice;
+            
+            clickBuyBtn.disabled = coins < clickPrice;
+            autoBuyBtn.disabled = coins < autoPrice;
+        }
+        
+        // ===== АНИМАЦИЯ МОНЕТКИ =====
+        function spawnCoinFly(x, y) {
+            var el = document.createElement('div');
+            el.className = 'coin-fly';
+            el.textContent = '+1';
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
+            var angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.2;
+            var dist = 80 + Math.random() * 60;
+            el.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+            el.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+            el.style.color = '#ffd700';
+            document.body.appendChild(el);
+            setTimeout(function() {
+                el.remove();
+            }, 900);
+        }
+        
+        // ===== КЛИК =====
+        function handleClick(e) {
+            coins += clickPower;
+            playClickSound();
+            updateUI();
+            saveGame();
+            
+            // Анимация монетки
+            var rect = clickBtn.getBoundingClientRect();
+            var cx = rect.left + rect.width / 2;
+            var cy = rect.top + rect.height / 2;
+            spawnCoinFly(cx - 20, cy - 20);
+        }
+        
+        // ===== ПОКУПКИ =====
+        function buyClickUpgrade() {
+            if (coins < clickPrice) return;
+            coins -= clickPrice;
+            clickLevel++;
+            clickPower = 1 + clickLevel;
+            clickPrice = Math.floor(clickPrice * 1.3);
+            playCoinSound();
+            updateUI();
+            saveGame();
+        }
+        
+        function buyAutoUpgrade() {
+            if (coins < autoPrice) return;
+            coins -= autoPrice;
+            autoCount++;
+            autoPrice = Math.floor(autoPrice * 1.25);
+            playCoinSound();
+            updateUI();
+            saveGame();
+        }
+        
+        // ===== СБРОС =====
+        function resetGame() {
+            if (confirm('Точно сбросить весь прогресс? Это нельзя отменить.')) {
+                localStorage.removeItem('clickerSave');
+                coins = 0;
+                clickPower = 1;
+                clickLevel = 0;
+                autoCount = 0;
+                autoPower = 1;
+                clickPrice = 25;
+                autoPrice = 100;
+                updateUI();
+                saveGame();
+            }
+        }
+        
+        // ===== ТИК АВТОКЛИКЕРА =====
+        function tick() {
+            if (autoCount > 0) {
+                var earned = autoCount * autoPower;
+                coins += earned;
+                updateUI();
+                saveGame();
+            }
+        }
+        
+        // ===== ИНИЦИАЛИЗАЦИЯ =====
+        function init() {
+            loadGame();
+            updateUI();
+            
+            clickBtn.addEventListener('click', handleClick);
+            clickBuyBtn.addEventListener('click', buyClickUpgrade);
+            autoBuyBtn.addEventListener('click', buyAutoUpgrade);
+            
+            setInterval(tick, 1000);
+            
+            // Сохраняем каждые 10 секунд на всякий случай
+            setInterval(saveGame, 10000);
+        }
+        
+        init();
+    </script>
+</body>
+</html>
