@@ -14,7 +14,7 @@
     <title>GameZone — твой игровой портал</title>
     <meta name="author" content="Дакиев Руслан">
     <meta name="copyright" content="Дакиев Руслан, 2024">
-    <meta name="description" content="Игровой портал: Угадай число, Камень-ножницы-бумага, Крестики-нолики">
+    <meta name="description" content="Игровой портал: Угадай число, Камень-ножницы-бумага, Крестики-нолики, Кликер">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
     <style>
         :root {
@@ -33,12 +33,12 @@
         }
         
         [data-theme="dark"] {
-            --bg-body: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            --bg-container: #1e1e2e;
+            --bg-body: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            --bg-container: #1a1a2e;
             --text-primary: #e0e0e0;
             --text-secondary: #aaaaaa;
             --text-muted: #777777;
-            --bg-card: #2a2a3e;
+            --bg-card: #2a2a4a;
             --border-card: #3a3a5e;
             --shadow: 0 10px 40px rgba(0,0,0,0.7);
             --badge-bg: #4facfe;
@@ -100,11 +100,11 @@
         .theme-switch-wrapper {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
         
         .theme-switch-wrapper .icon {
-            font-size: 22px;
+            font-size: 20px;
             color: var(--text-secondary);
             transition: color 0.3s;
         }
@@ -296,11 +296,11 @@
                 <div class="game-desc">Сыграй с другом или против компьютера</div>
                 <span class="card-badge">🏆 Стратегия</span>
             </div>
-            <div class="game-card coming-soon">
-                <span class="game-icon">🚀</span>
-                <div class="game-title">Скоро!</div>
-                <div class="game-desc">Новые игры уже в разработке</div>
-                <span class="card-badge">⏳ В разработке</span>
+            <div class="game-card" onclick="window.location.href='clicker.html'">
+                <span class="game-icon">🪙</span>
+                <div class="game-title">Кликер</div>
+                <div class="game-desc">Нажимай на монетку и развивай экономику</div>
+                <span class="card-badge">💰 Экономика</span>
             </div>
         </div>
         <div class="footer">
