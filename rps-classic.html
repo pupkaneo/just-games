@@ -16,43 +16,161 @@
     <meta name="copyright" content="Дакиев Руслан, 2024">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
     <style>
+        :root {
+            --bg-body: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --bg-container: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --border-color: #eee;
+            --shadow: 0 10px 40px rgba(0,0,0,0.3);
+            --bg-card: #f8f9fa;
+            --border-card: #ddd;
+            --badge-bg: #4facfe;
+            --badge-text: white;
+            --btn-reset-bg: #dc3545;
+            --btn-reset-hover: #c82333;
+            --btn-mode-bg: #4facfe;
+            --btn-mode-hover: #3d8bda;
+            --btn-back-bg: #6c757d;
+            --btn-back-hover: #5a6268;
+            --slider-bg: #ccc;
+            --result-bg: #f8f9fa;
+        }
+        
+        [data-theme="dark"] {
+            --bg-body: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            --bg-container: #1a1a2e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #aaaaaa;
+            --text-muted: #777777;
+            --border-color: #3a3a5e;
+            --shadow: 0 10px 40px rgba(0,0,0,0.7);
+            --bg-card: #2a2a4a;
+            --border-card: #3a3a5e;
+            --badge-bg: #4facfe;
+            --badge-text: white;
+            --btn-reset-bg: #dc3545;
+            --btn-reset-hover: #c82333;
+            --btn-mode-bg: #4facfe;
+            --btn-mode-hover: #3d8bda;
+            --btn-back-bg: #4a4a6e;
+            --btn-back-hover: #5a5a7e;
+            --slider-bg: #4a4a6e;
+            --result-bg: #2a2a4a;
+        }
+        
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: var(--bg-body);
             margin: 0;
             padding: 40px;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: background 0.5s ease;
         }
         
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background: white;
+            background: var(--bg-container);
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            box-shadow: var(--shadow);
             text-align: center;
+            transition: background 0.4s ease, box-shadow 0.4s ease;
         }
         
-        .logo {
-            font-size: 30px;
-            display: block;
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
             margin-bottom: 5px;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header-left .logo {
+            font-size: 30px;
         }
         
         h1 {
-            color: #333;
-            margin-bottom: 5px;
-            font-size: 28px;
+            color: var(--text-primary);
+            font-size: 24px;
+            margin: 0;
+            transition: color 0.3s;
+        }
+        
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .theme-switch-wrapper .icon {
+            font-size: 18px;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+        
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--slider-bg);
+            transition: 0.4s;
+            border-radius: 24px;
+        }
+        
+        .slider::before {
+            content: "";
+            position: absolute;
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+        
+        input:checked + .slider::before {
+            transform: translateX(24px);
         }
         
         .badge {
             display: inline-block;
-            background: #4facfe;
-            color: white;
+            background: var(--badge-bg);
+            color: var(--badge-text);
             padding: 4px 15px;
             border-radius: 20px;
             font-size: 12px;
@@ -60,10 +178,11 @@
         }
         
         .status {
-            color: #666;
+            color: var(--text-secondary);
             font-size: 14px;
             margin-bottom: 20px;
             min-height: 24px;
+            transition: color 0.3s;
         }
         
         .choices {
@@ -77,18 +196,19 @@
         .choice-btn {
             font-size: 40px;
             padding: 20px 30px;
-            border: 3px solid #ddd;
+            border: 3px solid var(--border-card);
             border-radius: 15px;
-            background: white;
+            background: var(--bg-card);
             cursor: pointer;
             transition: all 0.3s;
             min-width: 100px;
+            color: var(--text-primary);
         }
         
         .choice-btn:hover:not(:disabled) {
             transform: scale(1.1);
             border-color: #4facfe;
-            background: #f0f0ff;
+            background: var(--bg-container);
         }
         
         .choice-btn:active:not(:disabled) {
@@ -104,21 +224,22 @@
         .choice-btn .btn-label {
             display: block;
             font-size: 12px;
-            color: #666;
+            color: var(--text-secondary);
             margin-top: 5px;
         }
         
         .result-area {
             margin: 20px 0;
             padding: 20px;
-            background: #f8f9fa;
+            background: var(--result-bg);
             border-radius: 15px;
             min-height: 120px;
+            transition: background 0.3s;
         }
         
         .computer-choice {
             font-size: 18px;
-            color: #666;
+            color: var(--text-secondary);
             min-height: 30px;
         }
         
@@ -133,6 +254,7 @@
             font-weight: bold;
             margin: 10px 0;
             min-height: 40px;
+            color: var(--text-primary);
         }
         
         .thinking {
@@ -146,7 +268,7 @@
         
         .score {
             font-size: 18px;
-            color: #333;
+            color: var(--text-primary);
             margin-top: 10px;
         }
         
@@ -176,48 +298,61 @@
         }
         
         .reset-btn {
-            background: #dc3545;
+            background: var(--btn-reset-bg);
             color: white;
         }
         
         .reset-btn:hover {
-            background: #c82333;
+            background: var(--btn-reset-hover);
             transform: scale(1.05);
         }
         
         .mode-btn {
-            background: #4facfe;
+            background: var(--btn-mode-bg);
             color: white;
         }
         
         .mode-btn:hover {
-            background: #3d8bda;
+            background: var(--btn-mode-hover);
             transform: scale(1.05);
         }
         
         .back-btn {
-            background: #6c757d;
+            background: var(--btn-back-bg);
             color: white;
         }
         
         .back-btn:hover {
-            background: #5a6268;
+            background: var(--btn-back-hover);
             transform: scale(1.05);
         }
         
         .footer {
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 2px solid #eee;
-            color: #999;
+            border-top: 2px solid var(--border-color);
+            color: var(--text-muted);
             font-size: 12px;
+            transition: border-color 0.3s, color 0.3s;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <span class="logo">🎮</span>
-        <h1>GameZone</h1>
+        <div class="header">
+            <div class="header-left">
+                <span class="logo">🎮</span>
+                <h1>GameZone</h1>
+            </div>
+            <div class="theme-switch-wrapper">
+                <span class="icon">☀️</span>
+                <label class="theme-switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="icon">🌙</span>
+            </div>
+        </div>
         <div class="badge">Классическая версия</div>
         <div class="status" id="status">Готов к игре!</div>
         
@@ -260,33 +395,44 @@
     </div>
     
     <script>
-        // ============================================================
-        // Автор: Дакиев Руслан
-        // Игра: Камень-ножницы-бумага (классическая)
-        // ============================================================
+        var toggle = document.getElementById('themeToggle');
+        var currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            toggle.checked = true;
+        }
+        toggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        });
         
-        let playerScore = 0;
-        let computerScore = 0;
-        let ties = 0;
-        let isPlaying = false;
+        var playerScore = 0;
+        var computerScore = 0;
+        var ties = 0;
+        var isPlaying = false;
         
-        const rules = {
+        var rules = {
             'камень': 'ножницы',
             'ножницы': 'бумага',
             'бумага': 'камень'
         };
         
-        const emojis = {
+        var emojis = {
             'камень': '🪨',
             'ножницы': '✂️',
             'бумага': '📄'
         };
         
-        const computerChoiceEl = document.getElementById('computerChoice');
-        const resultEl = document.getElementById('result');
-        const scoreEl = document.getElementById('score');
-        const statusEl = document.getElementById('status');
-        const buttons = document.querySelectorAll('.choice-btn');
+        var computerChoiceEl = document.getElementById('computerChoice');
+        var resultEl = document.getElementById('result');
+        var scoreEl = document.getElementById('score');
+        var statusEl = document.getElementById('status');
+        var buttons = document.querySelectorAll('.choice-btn');
         
         function play(playerChoice) {
             if (isPlaying) {
@@ -295,26 +441,26 @@
             }
             
             isPlaying = true;
-            buttons.forEach(btn => btn.disabled = true);
+            buttons.forEach(function(btn) { btn.disabled = true; });
             statusEl.textContent = '🤔 Компьютер выбирает...';
             
-            const emojiSpan = document.querySelector('.computer-choice .emoji');
+            var emojiSpan = document.querySelector('.computer-choice .emoji');
             emojiSpan.textContent = '💭';
             emojiSpan.className = 'emoji thinking';
             resultEl.textContent = '...';
             resultEl.style.color = '#666';
             
-            setTimeout(() => {
-                const choices = ['камень', 'ножницы', 'бумага'];
-                const computerChoice = choices[Math.floor(Math.random() * 3)];
+            setTimeout(function() {
+                var choices = ['камень', 'ножницы', 'бумага'];
+                var computerChoice = choices[Math.floor(Math.random() * 3)];
                 
                 emojiSpan.textContent = emojis[computerChoice];
                 emojiSpan.className = 'emoji';
                 document.querySelector('.computer-choice').innerHTML = 
-                    `🤖 <span class="emoji">${emojis[computerChoice]}</span> Компьютер выбрал: <strong>${computerChoice}</strong>`;
+                    '🤖 <span class="emoji">' + emojis[computerChoice] + '</span> Компьютер выбрал: <strong>' + computerChoice + '</strong>';
                 
-                let result = '';
-                let resultColor = '#333';
+                var result = '';
+                var resultColor = '#333';
                 
                 if (playerChoice === computerChoice) {
                     result = '🤝 Ничья!';
@@ -337,17 +483,13 @@
                 statusEl.textContent = '✅ Готов к следующему ходу!';
                 
                 isPlaying = false;
-                buttons.forEach(btn => btn.disabled = false);
+                buttons.forEach(function(btn) { btn.disabled = false; });
                 
             }, 800);
         }
         
         function updateScore() {
-            scoreEl.innerHTML = `
-                Счёт: <span class="player-score">Ты ${playerScore}</span> | 
-                <span class="computer-score">Компьютер ${computerScore}</span> | 
-                <span class="ties-score">Ничьих ${ties}</span>
-            `;
+            scoreEl.innerHTML = 'Счёт: <span class="player-score">Ты ' + playerScore + '</span> | <span class="computer-score">Компьютер ' + computerScore + '</span> | <span class="ties-score">Ничьих ' + ties + '</span>';
         }
         
         function resetGame() {
@@ -357,8 +499,7 @@
             computerScore = 0;
             ties = 0;
             
-            document.querySelector('.computer-choice').innerHTML = 
-                '🤖 <span class="emoji">❓</span> Компьютер думает...';
+            document.querySelector('.computer-choice').innerHTML = '🤖 <span class="emoji">❓</span> Компьютер думает...';
             resultEl.textContent = 'Сделай выбор!';
             resultEl.style.color = '#333';
             statusEl.textContent = '🔄 Счёт сброшен!';
@@ -366,7 +507,7 @@
         }
         
         document.addEventListener('keydown', function(e) {
-            const key = e.key;
+            var key = e.key;
             if (key === '1') play('камень');
             else if (key === '2') play('ножницы');
             else if (key === '3') play('бумага');
